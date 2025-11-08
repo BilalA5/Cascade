@@ -40,12 +40,13 @@ export default function App() {
           latestSnapshot={snapshot}
         />
       )}
-
+  
       {/* After user clicks Generate → show Report */}
       {showReport && (
         <Report
           snapshot={snapshot}
           historyData={historyData}
+          onBack={() => setShowReport(false)}
         />
       )}
     </>
