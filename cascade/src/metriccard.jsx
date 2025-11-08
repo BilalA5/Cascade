@@ -4,21 +4,19 @@ import "./theme.css";
 
 export default function MetricCard({ label, value, description, icon: Icon }) {
   return (
-    <div className="card" style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: 700 }}>
+    <div className="card" style={{ textAlign: "center", alignItems: "center" }}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", fontWeight: 700 }}>
         {Icon && <Icon size={18} color="var(--highlight)" />}
         {label}
       </div>
 
-      <div style={{ fontSize: "38px", fontWeight: 800 }}>
+      <div style={{ fontSize: "38px", fontWeight: 800, marginTop: "6px" }}>
         {value}
       </div>
 
-      {description && (
-        <div style={{ color: "var(--text-subtle)", fontSize: "14px", lineHeight: "1.4" }}>
-          {description}
-        </div>
-      )}
+      <div style={{ color: "var(--text-subtle)", fontSize: "14px", marginTop: "4px" }}>
+        {description}
+      </div>
     </div>
   );
 }

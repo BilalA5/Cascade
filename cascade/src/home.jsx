@@ -16,8 +16,8 @@ export default function Home({ onGenerate, latestSnapshot }) {
       </h1>
 
       <p style={{ maxWidth: "650px", margin: "0 auto", fontSize: "17px", lineHeight: "1.6", color: "var(--text-subtle)" }}>
-        Cascade analyzes your real crop & soil sensor data to generate accurate,
-        real-time field health reports and tailored sustainability recommendations.
+        Cascade analyzes your real crop & soil through AI backed sensors to generate accurate,
+        real time field health reports tailored for sustainability recommendations.
       </p>
 
       <Button
