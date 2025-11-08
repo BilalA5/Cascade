@@ -21,7 +21,7 @@ def lambda_handler(event,context):
     #Process Data as a dataframe
     df = pd.DataFrame(items)
 
-    report  = {
+    report_summary  = {
         "moisture_percent" : df["Moisture"].astype(float).mean(),
         "humidity_percent" : df["Humidity"].astype(float).mean(),
         "NDVI" : df["NDVI"].astype(float).mean(),
@@ -50,3 +50,9 @@ def lambda_handler(event,context):
         "ndmi_change" : report["NDMI"] - prev_report.get("NDMI", 0)
     }
 
+    #Create the finalized report that takes data from current and prev_reports to make a comparision 
+    report = {"summary": report_summary, "comparison": comparison}
+    key = f"{device_id}/reports/report_{summary['timestamp']}.json"
+    s3.put_object(Bucket=BUCKET, Key=key, Body=json.dumps(report))
+
+    return {"statusCode": 200, "body": json.dumps(report)}
