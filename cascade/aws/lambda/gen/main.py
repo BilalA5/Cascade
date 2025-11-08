@@ -38,6 +38,15 @@ def lambda_handler(event,context):
         if "Contents" in last_report:
             last_key = sorted(last_report["Contents"], key = lambda x : x["LastModified"])[-1]["Key"]
             object = s3.get_object(Bucket=BUCKET, Key=last_key)
-            last_report = json.loads(obj["Body"].read().decode("utf-8"))
+            prev_report = json.loads(obj["Body"].read().decode("utf-8"))
     except Exception:
         pass
+
+    #Create a comparision report between the conntents of the previous and current report
+    compare_reports = {
+        "moisture_change" : report["moisture_percent"] - prev_report.get("moisture_percent", 0),
+        "humidity_change" : report["humidity_percent"] - prev_report.get("humidity_percent", 0),
+        "ndvi_change" : report["NDVI"] - prev_report.get("NDVI", 0),
+        "ndmi_change" : report["NDMI"] - prev_report.get("NDMI", 0)
+    }
+
