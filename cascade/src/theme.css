@@ -16,6 +16,13 @@
     font-family: 'Poppins', sans-serif;
 }
   
+  /* **FULL SCREEN COVERAGE FIX** */
+  html, body, #root {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+  }
+  
   body {
     background: var(--bg);
     color: var(--text-main);
@@ -26,6 +33,8 @@
     max-width: 1200px;
     margin: auto;
     padding: 20px;
+    position: relative; 
+    z-index: 1; 
   }
   .card {
     background: var(--panel);
@@ -56,6 +65,17 @@
   
   .btn-primary:hover {
     filter: brightness(1.1);
+  }
+
+  /* NEW SECONDARY BUTTON STYLE */
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-subtle);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.05);
   }
   
   .section-title {
@@ -103,4 +123,3 @@
       grid-template-columns: repeat(2, 1fr);
     }
   }
-  

@@ -3,11 +3,13 @@ import React from "react";
 import MetricCard from "./metriccard.jsx";
 import SensorChart from "./sensorchart.jsx";
 import Recommendations from "./recommendations.jsx";
+import Button from "./button.jsx"; // Import Button
 import { Droplets, Leaf, FlaskConical, Bug } from "lucide-react";
 import { generateRecommendations } from "./generateRecommendations.jsx";
 import "./theme.css";
 
-export default function Report({ snapshot, historyData }) {
+// Include onBack in destructuring
+export default function Report({ snapshot, historyData, onBack }) {
   const { ndmi, ndvi, ph, pestRisk, moisture } = snapshot;
 
   const recs = generateRecommendations({
@@ -21,6 +23,14 @@ export default function Report({ snapshot, historyData }) {
   return (
     <div className="container" style={{ paddingTop: "45px" }}>
 
+      {/* **BACK BUTTON** */}
+      <Button
+        onClick={onBack}
+        style={{ marginBottom: "25px", padding: "10px 20px", fontSize: "16px" }}
+        variant="secondary" 
+      >
+        ← Back to Home
+      </Button>
       {/* Section Title */}
       <h2 className="section-title">Farm Health Report</h2>
 

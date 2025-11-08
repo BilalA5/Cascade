@@ -42,4 +42,4 @@ export default function SensorChart({ data, dataKey, label }) {
       </div>
     </div>
   );
-}
+} 

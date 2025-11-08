@@ -4,7 +4,12 @@ import "./theme.css";
 
 export default function Button({ children, onClick, variant = "primary", style = {}, ...props }) {
   const base = "btn";
-  const type = variant === "primary" ? "btn-primary" : "";
+  let type = "";
+  if (variant === "primary") {
+    type = "btn-primary";
+  } else if (variant === "secondary") {
+    type = "btn-secondary";
+  }
 
   return (
     <button
