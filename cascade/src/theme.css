@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
 :root {
     --bg: #04261b;
     --panel: #0a3c2c;
@@ -5,14 +7,14 @@
     --text-main: #e8fff4;
     --text-subtle: #b8e8d6;
     --border: rgba(255, 255, 255, 0.08);
-  }
-  
-  * {
+}
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
-  }
+    font-family: 'Poppins', sans-serif;
+}
   
   body {
     background: var(--bg);

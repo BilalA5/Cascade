@@ -5,7 +5,7 @@ import "./theme.css";
 export default function Recommendations({ recs }) {
   return (
     <div>
-      <h2 className="section-title">🤖 AI Recommendations</h2>
+      <h2 className="section-title">AI Recommendations for Farming Optimization</h2>
       <div className="grid-2" style={{ gap: "20px" }}>
         {recs.map((rec, index) => (
           <div key={index} className="card">
