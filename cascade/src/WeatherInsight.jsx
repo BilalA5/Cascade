@@ -27,7 +27,14 @@ export default function WeatherInsight({ summary, error, loading }) {
   const nextHours = forecast?.hourly?.slice(0, 3) ?? []
 
   return (
-    <div className="card insight-card">
+    <div
+      className="card insight-card"
+      style={{
+        background: 'linear-gradient(135deg, #002e3b 0%, #006b7a 55%, #30c7d2 100%)',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        boxShadow: '0px 18px 34px rgba(0, 60, 60, 0.38)',
+      }}
+    >
       <h3 style={{ fontSize: '18px', marginBottom: '8px' }}>
         Field Weather Outlook
       </h3>
