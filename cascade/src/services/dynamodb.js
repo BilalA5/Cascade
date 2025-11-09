@@ -1,8 +1,15 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient, QueryCommand } from '@aws-sdk/lib-dynamodb'
 
-const REGION = import.meta.env.VITE_AWS_REGION
-const TABLE_NAME = import.meta.env.VITE_DYNAMODB_TABLE_NAME
+const REGION =
+  import.meta.env.VITE_AWS_REGION ??
+  (typeof process !== 'undefined' ? process.env.VITE_AWS_REGION : undefined) ??
+  'us-east-2'
+
+const TABLE_NAME =
+  import.meta.env.VITE_DYNAMODB_TABLE_NAME ??
+  (typeof process !== 'undefined' ? process.env.VITE_DYNAMODB_TABLE_NAME : undefined) ??
+  'CascadeReadings'
 
 const REQUIRED_ENV = [REGION, TABLE_NAME]
 
@@ -13,17 +20,28 @@ if (REQUIRED_ENV.some((value) => !value) && import.meta.env.DEV) {
   )
 }
 
-const clientConfig = {
-  region: REGION,
+const clientConfig = {}
+
+if (REGION) {
+  clientConfig.region = REGION
+} else if (import.meta.env.DEV) {
+  console.warn(
+    'DynamoDB region not configured. Falling back to us-east-2. Set VITE_AWS_REGION in your environment.'
+  )
+  clientConfig.region = 'us-east-2'
 }
 
-if (
-  import.meta.env.VITE_AWS_ACCESS_KEY_ID &&
-  import.meta.env.VITE_AWS_SECRET_ACCESS_KEY
-) {
+const ACCESS_KEY =
+  import.meta.env.VITE_AWS_ACCESS_KEY_ID ??
+  (typeof process !== 'undefined' ? process.env.VITE_AWS_ACCESS_KEY_ID : undefined)
+const SECRET_KEY =
+  import.meta.env.VITE_AWS_SECRET_ACCESS_KEY ??
+  (typeof process !== 'undefined' ? process.env.VITE_AWS_SECRET_ACCESS_KEY : undefined)
+
+if (ACCESS_KEY && SECRET_KEY) {
   clientConfig.credentials = {
-    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
-    secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
+    accessKeyId: ACCESS_KEY,
+    secretAccessKey: SECRET_KEY,
   }
 }
 

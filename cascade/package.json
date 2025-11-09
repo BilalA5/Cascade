@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@aws-sdk/client-dynamodb": "^3.927.0",
     "@aws-sdk/lib-dynamodb": "^3.927.0",
     "@google/generative-ai": "^0.24.1",
