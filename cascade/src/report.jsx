@@ -4,24 +4,28 @@ import MetricCard from "./metriccard.jsx";
 import SensorChart from "./sensorchart.jsx";
 import Recommendations from "./recommendations.jsx";
 import Button from "./button.jsx"; 
-// Updated: Swapped 'Leaf' for 'HeartPulse'
 import { Droplets, HeartPulse, FlaskConical, Bug } from "lucide-react";
-// Import the updated recommendations generator
-import { generateRecommendations } from "./generateRecommendations.jsx";
 import "./theme.css";
 
-export default function Report({ snapshot, historyData, onBack, loading }) {
-  // UPDATED: Destructure 'healthScore' instead of 'ndvi'
-  const { ndmi, healthScore, ph, pestRisk, moisture } = snapshot;
-
-  // UPDATED: Pass 'healthScore' instead of 'ndvi' to the generator
-  const recs = generateRecommendations({
-    ndmi,
-    healthScore, 
+export default function Report({
+  snapshot,
+  historyData,
+  onBack,
+  loading,
+  insightsError,
+  recommendations,
+}) {
+  const {
+    ndmiDisplay,
+    healthScore,
     ph,
     pestRisk,
-    moisture
-  });
+    pestPercent,
+    moisture,
+    moistureDetail,
+    pestDetail,
+    healthDetail,
+  } = snapshot;
 
   return (
     <div className="container" style={{ paddingTop: "45px" }}>
@@ -41,17 +45,18 @@ export default function Report({ snapshot, historyData, onBack, loading }) {
       <div className="grid-4" style={{ marginTop: "20px" }}>
         <MetricCard
           label="NDMI (Soil Moisture)"
-          value={loading ? "…" : ndmi}
+          value={loading ? "…" : ndmiDisplay}
           description="Water stored in root zone"
           icon={Droplets}
+          detail={moistureDetail}
         />
 
-        {/* UPDATED: Plant Health Score Card */}
         <MetricCard 
             label="Plant Health Score" 
             value={loading ? "…" : Math.round(healthScore || 0) + "/100"}
             description="Overall crop vigor and resilience" 
-            icon={HeartPulse} 
+            icon={HeartPulse}
+            detail={healthDetail}
         />
 
         <MetricCard
@@ -63,9 +68,16 @@ export default function Report({ snapshot, historyData, onBack, loading }) {
 
         <MetricCard
           label="Pest Risk"
-          value={loading ? "…" : Math.round((pestRisk || 0) * 100) + "%"}
+          value={
+            loading
+              ? "…"
+              : `${Math.round(
+                  pestPercent ?? (pestRisk || 0) * 100,
+                )}%`
+          }
           description="Projected 48h outbreak probability"
           icon={Bug}
+          detail={pestDetail}
         />
       </div>
 
@@ -80,7 +92,6 @@ export default function Report({ snapshot, historyData, onBack, loading }) {
 
         <SensorChart
           data={historyData}
-          // UPDATED: Changed dataKey and label for the trend chart
           dataKey="healthScore"
           label="Plant Health Score Trend" 
           loading={loading}
@@ -89,7 +100,15 @@ export default function Report({ snapshot, historyData, onBack, loading }) {
 
       {/* AI RECOMMENDATIONS */}
       <div style={{ marginTop: "40px" }}>
-        <Recommendations recs={recs} />
+        {insightsError && (
+          <div className="card" style={{ marginBottom: "16px" }}>
+            <h3 style={{ fontSize: "18px", marginBottom: "8px" }}>AI insight unavailable</h3>
+            <p style={{ color: "var(--text-subtle)" }}>
+              Gemini could not generate a response. Showing fallback guidance based on field thresholds.
+            </p>
+          </div>
+        )}
+        <Recommendations recs={recommendations} />
       </div>
     </div>
   );

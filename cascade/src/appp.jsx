@@ -6,6 +6,8 @@ import {
   useCascadeReadings,
   useLatestReading,
 } from './hooks/useCascadeReadings'
+import { useGeminiInsights } from './hooks/useGeminiInsights'
+import generateFallbackRecommendations from './generateRecommendations.jsx.jsx'
 
 const DEFAULT_DEVICE_ID = 'ESP32_01'
 
@@ -113,6 +115,52 @@ export default function App() {
     [readingsData]
   )
 
+  const moistureSeries = useMemo(
+    () =>
+      historyData
+        .map((entry) => entry.moisturePercent)
+        .filter((value) => value !== null && value !== undefined),
+    [historyData]
+  )
+
+  const pestSeries = useMemo(
+    () =>
+      historyData
+        .map((entry) => entry.pestPercent)
+        .filter((value) => value !== null && value !== undefined),
+    [historyData]
+  )
+
+  const {
+    data: geminiInsights,
+    isLoading: insightsLoading,
+    isError: insightsError,
+  } = useGeminiInsights(
+    snapshot.moisturePercent !== null
+      ? {
+          moisturePercent: snapshot.moisturePercent,
+          pestPercent: snapshot.pestPercent,
+          ph: snapshot.ph,
+          recentMoisture: moistureSeries,
+          recentPest: pestSeries,
+        }
+      : null,
+    { enabled: showReport }
+  )
+
+  const recommendations = useMemo(() => {
+    if (geminiInsights && geminiInsights.length) {
+      return geminiInsights
+    }
+    return generateFallbackRecommendations({
+      ndmi: snapshot.ndmi,
+      healthScore: snapshot.healthScore,
+      ph: snapshot.ph,
+      pestRisk: snapshot.pestRisk,
+      moisture: snapshot.moisturePercent ?? 0,
+    })
+  }, [geminiInsights, snapshot])
+
   const loading = latestLoading || readingsLoading
 
   return (
@@ -122,7 +170,9 @@ export default function App() {
           snapshot={snapshot}
           historyData={historyData}
           onBack={() => setShowReport(false)}
-          loading={loading}
+          loading={loading || insightsLoading}
+          insightsError={insightsError}
+          recommendations={recommendations}
         />
       ) : (
         <Home

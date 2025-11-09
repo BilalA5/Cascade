@@ -8,8 +8,16 @@ import "./theme.css";
 import { Droplets, HeartPulse, FlaskConical, Bug } from "lucide-react"; 
 
 export default function Home({ onGenerate, latestSnapshot, loading }) {
-  // UPDATED: Replaced 'ndvi' with 'healthScore' in destructuring
-  const { ndmi, healthScore, ph, pestRisk } = latestSnapshot || {}; 
+  const {
+    ndmiDisplay,
+    healthScore,
+    ph,
+    pestRisk,
+    pestPercent,
+    moistureDetail,
+    pestDetail,
+    healthDetail,
+  } = latestSnapshot || {};
 
   return (
     <> {/* Use Fragment to wrap the two top-level divs */}
@@ -80,16 +88,35 @@ export default function Home({ onGenerate, latestSnapshot, loading }) {
 
         {/* Metrics */}
         <div className="grid-4 metrics-section" style={{ marginTop: "50px" }}>
-          <MetricCard label="NDMI (Moisture)" value={loading ? "…" : ndmi} description="Root zone water availability" icon={Droplets} />
+          <MetricCard
+            label="NDMI (Moisture)"
+            value={loading ? "…" : ndmiDisplay}
+            description="Root zone water availability"
+            icon={Droplets}
+            detail={moistureDetail}
+          />
           {/* UPDATED: Plant Health Score Card with NaN fix */}
           <MetricCard 
             label="Plant Health Score" 
             value={loading ? "…" : Math.round(healthScore || 0) + "/100"} // Use `|| 0` to prevent NaN
             description="Overall crop vigor and resilience" 
-            icon={HeartPulse} 
+            icon={HeartPulse}
+            detail={healthDetail}
           />
           <MetricCard label="Soil pH" value={loading ? "…" : ph} description="Nutrient absorption readiness" icon={FlaskConical} />
-          <MetricCard label="Pest Risk" value={loading ? "…" : Math.round((pestRisk || 0) * 100) + "%"} description="Outbreak likelihood" icon={Bug} />
+          <MetricCard
+            label="Pest Risk"
+            value={
+              loading
+                ? "…"
+                : `${Math.round(
+                    pestPercent ?? (pestRisk || 0) * 100,
+                  )}%`
+            }
+            description="Outbreak likelihood"
+            icon={Bug}
+            detail={pestDetail}
+          />
         </div>
 
       </div>
