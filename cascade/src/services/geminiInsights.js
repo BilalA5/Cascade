@@ -1,6 +1,6 @@
 import { callGemini, getGeminiModel } from './geminiClient'
 
-const MAX_INSIGHTS = 3
+const MAX_INSIGHTS = 4
 
 const buildPrompt = ({
   moisturePercent,
@@ -26,7 +26,7 @@ ${moistureTrend || 'No recent moisture history.'}
 Recent pest history:
 ${pestTrend || 'No recent pest history.'}
 
-Based on these numbers, generate up to ${MAX_INSIGHTS} concise recommendations.
+Based on these numbers, generate exactly ${MAX_INSIGHTS} concise recommendations.
 
 Return your answer strictly as JSON in this shape:
 [
