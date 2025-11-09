@@ -24,7 +24,7 @@ def lambda_handler(event,context):
     report_summary  = {
         "time_stamp" : datetime.utcnow().isoformat() + "Z",
         "moisture_percent" : df["moisture_pct"].astype(float).mean(),
-        "pest_score" : df["pest"].astype(int).mean(),
+        "pest_score" : df["pest_score"].astype(int).mean(),
         "plant_health" : df["health_score"].astype(float).mean(),
     }
 
@@ -44,8 +44,8 @@ def lambda_handler(event,context):
     #Create a comparision report between the conntents of the previous and current report
     compare_reports = {
         "moisture_change" : report_summary["moisture_pct"] - prev_report.get("moisture_pct", 0),
-        "pest_change" : report_summary["pest"] - prev_report.get("pest", 0),
-        "plant_health" : report_summary["health_score"] - prev_report.get("health_score", 0)
+        "pest_change" : report_summary["pest_score"] - prev_report.get("pest_score", 0),
+        "health_change" : report_summary["health_score"] - prev_report.get("health_score", 0)
     }
 
     #Create the finalized report that takes data from current and prev_reports to make a comparision 
