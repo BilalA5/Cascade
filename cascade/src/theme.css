@@ -131,3 +131,32 @@
       grid-template-columns: repeat(2, 1fr);
     }
   }
+
+.insight-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.insight-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.04) 40%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  pointer-events: none;
+}
+
+.insight-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0px 24px 36px rgba(0, 60, 60, 0.45);
+}
+
+.insight-card > * {
+  position: relative;
+  z-index: 1;
+}
