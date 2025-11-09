@@ -22,10 +22,9 @@ def lambda_handler(event,context):
     df = pd.DataFrame(items)
 
     report_summary  = {
-        "moisture_percent" : df["Moisture"].astype(float).mean(),
-        "humidity_percent" : df["Humidity"].astype(float).mean(),
-        "NDVI" : df["NDVI"].astype(float).mean(),
-        "NDMI" : df["NDMI"].astype(float).mean(),
+        "moisture_percent" : df["moisture"].astype(float).mean(),
+        "pest_level" : df["pest"].astype(int).mean(),
+        "plant_health" : df["health"].astype(float).mean(),
         "time_stamp" : datetime.utcnow().isoformat() + "Z"
     }
 
@@ -38,21 +37,20 @@ def lambda_handler(event,context):
         if "Contents" in last_report:
             last_key = sorted(last_report["Contents"], key = lambda x : x["LastModified"])[-1]["Key"]
             object = s3.get_object(Bucket=BUCKET, Key=last_key)
-            prev_report = json.loads(obj["Body"].read().decode("utf-8"))
+            prev_report = json.loads(object["Body"].read().decode("utf-8"))
     except Exception:
         pass
 
     #Create a comparision report between the conntents of the previous and current report
     compare_reports = {
-        "moisture_change" : report["moisture_percent"] - prev_report.get("moisture_percent", 0),
-        "humidity_change" : report["humidity_percent"] - prev_report.get("humidity_percent", 0),
-        "ndvi_change" : report["NDVI"] - prev_report.get("NDVI", 0),
-        "ndmi_change" : report["NDMI"] - prev_report.get("NDMI", 0)
+        "moisture_change" : report_summary["moisture_percent"] - prev_report.get("moisture_percent", 0),
+        "pest_change" : report_summary["pest_level"] - prev_report.get("pest_level", 0),
+        "plant_health" : report_summary["plant_health"] - prev_report.get("plant_health", 0)
     }
 
     #Create the finalized report that takes data from current and prev_reports to make a comparision 
-    report = {"summary": report_summary, "comparison": comparison}
-    key = f"{device_id}/reports/report_{summary['timestamp']}.json"
+    report = {"summary": report_summary, "comparison": compare_reports}
+    key = f"{device_id}/reports/report_{report_summary['time_stamp']}.json"
     s3.put_object(Bucket=BUCKET, Key=key, Body=json.dumps(report))
 
     return {"statusCode": 200, "body": json.dumps(report)}
