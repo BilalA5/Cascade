@@ -131,37 +131,6 @@ export default function App() {
   )
 
   const {
-    data: geminiInsights,
-    isLoading: insightsLoading,
-    isError: insightsError,
-    error: insightsErrorObject,
-  } = useGeminiInsights(
-    snapshot.moisturePercent !== null
-      ? {
-          moisturePercent: snapshot.moisturePercent,
-          pestPercent: snapshot.pestPercent,
-          ph: snapshot.ph,
-          recentMoisture: moistureSeries,
-          recentPest: pestSeries,
-        }
-      : null,
-    { enabled: showReport }
-  )
-
-  const recommendations = useMemo(() => {
-    if (geminiInsights && geminiInsights.length) {
-      return geminiInsights
-    }
-    return generateFallbackRecommendations({
-      ndmi: snapshot.ndmi,
-      healthScore: snapshot.healthScore,
-      ph: snapshot.ph,
-      pestRisk: snapshot.pestRisk,
-      moisture: snapshot.moisturePercent ?? 0,
-    })
-  }, [geminiInsights, snapshot])
-
-  const {
     data: carbonEstimate,
     isLoading: carbonLoading,
     isError: carbonError,
@@ -213,6 +182,60 @@ export default function App() {
       forecast: weatherForecast,
     }
   }, [currentWeather, weatherForecast])
+
+  const geminiMetrics =
+    snapshot.moisturePercent !== null
+      ? {
+          moisturePercent: snapshot.moisturePercent,
+          pestPercent: snapshot.pestPercent,
+          ph: snapshot.ph,
+          recentMoisture: moistureSeries,
+          recentPest: pestSeries,
+          carbon: carbonSummary?.estimate
+            ? {
+                carbonKg: carbonSummary.estimate.carbonKg,
+                carbonMt: carbonSummary.estimate.carbonMt,
+                electricity: {
+                  value: carbonSummary.estimate.electricityValue,
+                  unit: carbonSummary.estimate.electricityUnit,
+                },
+                location: {
+                  country: carbonSummary.estimate.country,
+                  state: carbonSummary.estimate.state,
+                },
+              }
+            : null,
+          weather: weatherSummary?.current
+            ? {
+                temperature: weatherSummary.current.temperature,
+                humidity: weatherSummary.current.humidity,
+                windSpeed: weatherSummary.current.windSpeed,
+                description: weatherSummary.current.description,
+                forecast: weatherSummary.forecast?.hourly ?? [],
+              }
+            : null,
+        }
+      : null
+
+  const {
+    data: geminiInsights,
+    isLoading: insightsLoading,
+    isError: insightsError,
+    error: insightsErrorObject,
+  } = useGeminiInsights(geminiMetrics, { enabled: showReport })
+
+  const recommendations = useMemo(() => {
+    if (geminiInsights && geminiInsights.length) {
+      return geminiInsights
+    }
+    return generateFallbackRecommendations({
+      ndmi: snapshot.ndmi,
+      healthScore: snapshot.healthScore,
+      ph: snapshot.ph,
+      pestRisk: snapshot.pestRisk,
+      moisture: snapshot.moisturePercent ?? 0,
+    })
+  }, [geminiInsights, snapshot])
 
   const externalLoading =
     carbonLoading || projectsLoading || weatherLoading || forecastLoading
