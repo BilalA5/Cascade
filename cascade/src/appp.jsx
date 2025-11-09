@@ -6,7 +6,6 @@ import { useCascadeReadings, useLatestReading } from './hooks/useCascadeReadings
 import { useGeminiInsights } from './hooks/useGeminiInsights'
 import generateFallbackRecommendations from './generateRecommendations.jsx.jsx'
 import { useCarbonEstimate, useCarbonProjects } from './hooks/useCarbonInsights'
-import { useCurrentWeather, useWeatherForecast } from './hooks/useWeatherInsights'
 
 const DEFAULT_DEVICE_ID = 'ESP32_01'
 
@@ -144,20 +143,6 @@ export default function App() {
     error: projectsErrorObject,
   } = useCarbonProjects()
 
-  const {
-    data: currentWeather,
-    isLoading: weatherLoading,
-    isError: weatherError,
-    error: weatherErrorObject,
-  } = useCurrentWeather()
-
-  const {
-    data: weatherForecast,
-    isLoading: forecastLoading,
-    isError: forecastError,
-    error: forecastErrorObject,
-  } = useWeatherForecast()
-
   const carbonSummary = useMemo(() => {
     if (!carbonEstimate) return null
     const topProject = Array.isArray(carbonProjects) ? carbonProjects[0] : null
@@ -174,14 +159,6 @@ export default function App() {
         : null,
     }
   }, [carbonEstimate, carbonProjects])
-
-  const weatherSummary = useMemo(() => {
-    if (!currentWeather) return null
-    return {
-      current: currentWeather,
-      forecast: weatherForecast,
-    }
-  }, [currentWeather, weatherForecast])
 
   const geminiMetrics =
     snapshot.moisturePercent !== null
@@ -203,15 +180,6 @@ export default function App() {
                   country: carbonSummary.estimate.country,
                   state: carbonSummary.estimate.state,
                 },
-              }
-            : null,
-          weather: weatherSummary?.current
-            ? {
-                temperature: weatherSummary.current.temperature,
-                humidity: weatherSummary.current.humidity,
-                windSpeed: weatherSummary.current.windSpeed,
-                description: weatherSummary.current.description,
-                forecast: weatherSummary.forecast?.hourly ?? [],
               }
             : null,
         }
@@ -237,8 +205,7 @@ export default function App() {
     })
   }, [geminiInsights, snapshot])
 
-  const externalLoading =
-    carbonLoading || projectsLoading || weatherLoading || forecastLoading
+  const externalLoading = carbonLoading || projectsLoading
 
   const loading = latestLoading || readingsLoading
 
@@ -254,12 +221,8 @@ export default function App() {
           insightsErrorMessage={insightsErrorObject?.message}
           recommendations={recommendations}
           carbonSummary={carbonSummary}
-          weatherSummary={weatherSummary}
           carbonError={
             carbonError ? carbonErrorObject?.message : projectsErrorObject?.message
-          }
-          weatherError={
-            weatherError ? weatherErrorObject?.message : forecastErrorObject?.message
           }
           externalLoading={externalLoading}
         />
@@ -269,12 +232,8 @@ export default function App() {
           onGenerate={() => setShowReport(true)}
           loading={loading}
           carbonSummary={carbonSummary}
-          weatherSummary={weatherSummary}
           carbonError={
             carbonError ? carbonErrorObject?.message : projectsErrorObject?.message
-          }
-          weatherError={
-            weatherError ? weatherErrorObject?.message : forecastErrorObject?.message
           }
           externalLoading={externalLoading}
         />

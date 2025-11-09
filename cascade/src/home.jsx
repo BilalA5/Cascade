@@ -4,7 +4,6 @@ import Button from "./button.jsx";
 import MetricCard from "./metriccard.jsx";
 import LiquidEther from './LiquidEther'; 
 import CarbonInsight from './CarbonInsight.jsx'
-import WeatherInsight from './WeatherInsight.jsx'
 import "./theme.css";
 import { Droplets, HeartPulse, FlaskConical, Bug } from "lucide-react"; 
 
@@ -13,9 +12,7 @@ export default function Home({
   latestSnapshot,
   loading,
   carbonSummary,
-  weatherSummary,
   carbonError,
-  weatherError,
   externalLoading,
 }) {
   const {
@@ -70,7 +67,7 @@ export default function Home({
         {/* Hero Content */}
         <div style={{ paddingBottom: '30px' }}>
           <h1 style={{ fontSize: "38px", fontWeight: "700", marginBottom: "12px" }}>
-            Grow Smarter with CASCADE
+            Grow Smarter with Cascade
           </h1>
 
           {/* Color change applied here */}
@@ -131,18 +128,11 @@ export default function Home({
 
         <div style={{ marginTop: '36px' }}>
           <h2 className="section-title">Environmental Conditions</h2>
-          <div className="grid-2" style={{ gap: '20px' }}>
-            <CarbonInsight
-              summary={carbonSummary}
-              error={carbonError}
-              loading={externalLoading}
-            />
-            <WeatherInsight
-              summary={weatherSummary}
-              error={weatherError}
-              loading={externalLoading}
-            />
-          </div>
+          <CarbonInsight
+            summary={carbonSummary}
+            error={carbonError}
+            loading={externalLoading}
+          />
         </div>
 
       </div>

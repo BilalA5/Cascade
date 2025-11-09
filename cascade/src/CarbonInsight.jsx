@@ -17,14 +17,7 @@ export default function CarbonInsight({
   const project = summary?.project
 
   return (
-    <div
-      className="card insight-card"
-      style={{
-        background: 'linear-gradient(135deg, #00332b 0%, #006a55 60%, #1dd3a7 100%)',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
-        boxShadow: '0px 18px 34px rgba(0, 60, 60, 0.38)',
-      }}
-    >
+    <div className="card">
       <h3 style={{ fontSize: '18px', marginBottom: '8px' }}>
         Carbon Footprint Snapshot
       </h3>

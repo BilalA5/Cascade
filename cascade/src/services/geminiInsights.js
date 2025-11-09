@@ -9,7 +9,6 @@ const buildPrompt = ({
   recentMoisture = [],
   recentPest = [],
   carbon = null,
-  weather = null,
 }) => {
   const moistureTrend = recentMoisture.slice(0, 6).map((value, index) => `Reading ${index + 1}: ${value ?? 'unknown'}%`).join('\n')
   const pestTrend = recentPest.slice(0, 6).map((value, index) => `Reading ${index + 1}: ${value ?? 'unknown'}%`).join('\n')
@@ -19,27 +18,6 @@ const buildPrompt = ({
 - Carbon emitted: ${carbon?.carbonKg ?? 'unknown'} kg CO₂ (${carbon?.carbonMt ?? 'unknown'} metric tons)
 - Location: ${carbon?.location?.state ?? 'unknown'}, ${carbon?.location?.country ?? 'unknown'}`
     : 'Carbon metrics unavailable.'
-
-  const weatherSummary = weather
-    ? `Current weather:
-- Temperature: ${weather?.temperature ?? 'unknown'}°C
-- Humidity: ${weather?.humidity ?? 'unknown'}%
-- Wind speed: ${weather?.windSpeed ?? 'unknown'} m/s
-- Conditions: ${weather?.description ?? 'unknown'}
-
-Upcoming forecast entries:
-${(weather?.forecast ?? [])
-      .slice(0, 4)
-      .map(
-        (entry, index) =>
-          `Forecast ${index + 1}: temperature ${entry?.temperature ?? 'unknown'}°C, rain chance ${
-            entry?.precipitationProbability != null
-              ? Math.round(entry.precipitationProbability * 100)
-              : 'unknown'
-          }%, weather ${entry?.weather ?? 'unknown'}`,
-      )
-      .join('\n') || 'No imminent forecast data.'}`
-    : 'Weather data unavailable.'
 
   return `
 You are an agronomy assistant providing actionable insights for a farmer.
@@ -57,9 +35,6 @@ ${pestTrend || 'No recent pest history.'}
 
 Carbon footprint context:
 ${carbonSummary}
-
-Weather context:
-${weatherSummary}
 
 Based on these numbers, generate exactly ${MAX_INSIGHTS} concise recommendations.
 
