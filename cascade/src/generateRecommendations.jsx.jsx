@@ -1,7 +1,7 @@
 // src/modules/generateRecommendations.js
 
 // UPDATED: Function accepts 'healthScore' instead of 'ndvi'
-export function generateRecommendations({ ndmi, healthScore, ph, pestRisk, moisture }) {
+export function generateFallbackRecommendations({ ndmi, healthScore, ph, pestRisk, moisture }) {
   const recs = [];
 
   // --- Watering logic (using NDMI + soil moisture %)
@@ -59,3 +59,5 @@ export function generateRecommendations({ ndmi, healthScore, ph, pestRisk, moist
 
   return recs;
 }
+
+export default generateFallbackRecommendations;
