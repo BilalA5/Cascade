@@ -135,6 +135,7 @@ export default function App() {
     data: geminiInsights,
     isLoading: insightsLoading,
     isError: insightsError,
+    error: insightsErrorObject,
   } = useGeminiInsights(
     snapshot.moisturePercent !== null
       ? {
@@ -172,6 +173,7 @@ export default function App() {
           onBack={() => setShowReport(false)}
           loading={loading || insightsLoading}
           insightsError={insightsError}
+          insightsErrorMessage={insightsErrorObject?.message}
           recommendations={recommendations}
         />
       ) : (
