@@ -3,12 +3,10 @@ frontend:
   phases:
     preBuild:
       commands:
-        - cd cascade
-        - npm ci
+        - npm ci --prefix cascade
     build:
       commands:
-        - cd cascade
-        - npm run build
+        - npm run build --prefix cascade
   artifacts:
     baseDirectory: cascade/dist
     files:
