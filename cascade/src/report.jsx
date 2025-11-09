@@ -3,18 +3,21 @@ import React from "react";
 import MetricCard from "./metriccard.jsx";
 import SensorChart from "./sensorchart.jsx";
 import Recommendations from "./recommendations.jsx";
-import Button from "./button.jsx"; // Import Button
-import { Droplets, Leaf, FlaskConical, Bug } from "lucide-react";
+import Button from "./button.jsx"; 
+// Updated: Swapped 'Leaf' for 'HeartPulse'
+import { Droplets, HeartPulse, FlaskConical, Bug } from "lucide-react";
+// Import the updated recommendations generator
 import { generateRecommendations } from "./generateRecommendations.jsx";
 import "./theme.css";
 
-// Include onBack in destructuring
 export default function Report({ snapshot, historyData, onBack }) {
-  const { ndmi, ndvi, ph, pestRisk, moisture } = snapshot;
+  // UPDATED: Destructure 'healthScore' instead of 'ndvi'
+  const { ndmi, healthScore, ph, pestRisk, moisture } = snapshot;
 
+  // UPDATED: Pass 'healthScore' instead of 'ndvi' to the generator
   const recs = generateRecommendations({
     ndmi,
-    ndvi,
+    healthScore, 
     ph,
     pestRisk,
     moisture
@@ -43,11 +46,12 @@ export default function Report({ snapshot, historyData, onBack }) {
           icon={Droplets}
         />
 
-        <MetricCard
-          label="NDVI (Greenness)"
-          value={ndvi}
-          description="Plant energy & health"
-          icon={Leaf}
+        {/* UPDATED: Plant Health Score Card */}
+        <MetricCard 
+            label="Plant Health Score" 
+            value={Math.round(healthScore || 0) + "/100"}
+            description="Overall crop vigor and resilience" 
+            icon={HeartPulse} 
         />
 
         <MetricCard
@@ -75,8 +79,9 @@ export default function Report({ snapshot, historyData, onBack }) {
 
         <SensorChart
           data={historyData}
-          dataKey="ndvi"
-          label="NDVI Vegetation Trend"
+          // UPDATED: Changed dataKey and label for the trend chart
+          dataKey="healthScore"
+          label="Plant Health Score Trend" 
         />
       </div>
 
@@ -84,7 +89,6 @@ export default function Report({ snapshot, historyData, onBack }) {
       <div style={{ marginTop: "40px" }}>
         <Recommendations recs={recs} />
       </div>
-
     </div>
   );
 }

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Home from "./home.jsx";
 import Report from "./report.jsx";
-import { calculateIndices } from "./calculateindices.jsx";
+import { calculateIndices } from "./calculateindices.jsx"; 
 import "./theme.css";
 
 export default function App() {
@@ -18,37 +18,35 @@ export default function App() {
     moisturePercent: 18 // Capacitive soil moisture sensor
   };
 
-  // Convert raw sensor values → NDVI, NDMI, etc.
+  // Convert raw sensor values → NDMI, healthScore, etc.
+  // NOTE: 'snapshot' object must now contain 'healthScore' instead of 'ndvi'
   const snapshot = calculateIndices(rawSensorData);
 
   // Historical time-series data for charts (fake demo data here)
   const historyData = [
-    { time: "09:00", moisture: 22, ndvi: 0.55 },
-    { time: "10:00", moisture: 21, ndvi: 0.57 },
-    { time: "11:00", moisture: 19, ndvi: 0.58 },
-    { time: "12:00", moisture: 18, ndvi: 0.61 },
-    { time: "13:00", moisture: 16, ndvi: 0.59 },
-    { time: "14:00", moisture: 15, ndvi: 0.56 },
+    // UPDATED: Changed 'ndvi' key to 'healthScore' and scaled the values to 0-100
+    { time: "09:00", moisture: 22, healthScore: 55 },
+    { time: "10:00", moisture: 21, healthScore: 57 },
+    { time: "11:00", moisture: 19, healthScore: 58 },
+    { time: "12:00", moisture: 18, healthScore: 61 },
+    { time: "13:00", moisture: 16, healthScore: 59 },
+    { time: "14:00", moisture: 15, healthScore: 56 },
   ];
 
   return (
-    <>
-      {/* If user has not generated yet → show Home */}
-      {!showReport && (
-        <Home
-          onGenerate={() => setShowReport(true)}
-          latestSnapshot={snapshot}
-        />
-      )}
-  
-      {/* After user clicks Generate → show Report */}
-      {showReport && (
+    <div className="app-container">
+      {showReport ? (
         <Report
           snapshot={snapshot}
           historyData={historyData}
           onBack={() => setShowReport(false)}
         />
+      ) : (
+        <Home
+          latestSnapshot={snapshot}
+          onGenerate={() => setShowReport(true)}
+        />
       )}
-    </>
+    </div>
   );
 }

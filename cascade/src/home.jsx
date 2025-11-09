@@ -4,12 +4,11 @@ import Button from "./button.jsx";
 import MetricCard from "./metriccard.jsx";
 import LiquidEther from './LiquidEther'; 
 import "./theme.css";
-// I'm changing 'Leaf' to 'HeartPulse' for a health-related icon (you might need to install 'lucide-react')
-// If you prefer the old Leaf icon, you can change 'HeartPulse' back to 'Leaf'
+// Updated: Swapped 'Leaf' for 'HeartPulse' for a health-related icon
 import { Droplets, HeartPulse, FlaskConical, Bug } from "lucide-react"; 
 
 export default function Home({ onGenerate, latestSnapshot }) {
-  //  UPDATED: Replaced 'ndvi' with 'healthScore' in destructuring
+  // UPDATED: Replaced 'ndvi' with 'healthScore' in destructuring
   const { ndmi, healthScore, ph, pestRisk } = latestSnapshot; 
 
   return (
@@ -56,6 +55,7 @@ export default function Home({ onGenerate, latestSnapshot }) {
             Grow Smarter with CASCADE
           </h1>
 
+          {/* Color change applied here */}
           <p style={{ maxWidth: "650px", margin: "0 auto", fontSize: "17px", lineHeight: "1.6", color: "#004D00" }}>
             Cascade analyzes your real crop & soil through AI backed sensors to generate accurate,
             real time field health reports tailored for sustainability
@@ -80,12 +80,12 @@ export default function Home({ onGenerate, latestSnapshot }) {
         {/* Metrics */}
         <div className="grid-4 metrics-section" style={{ marginTop: "50px" }}>
           <MetricCard label="NDMI (Moisture)" value={ndmi} description="Root zone water availability" icon={Droplets} />
-          {/* 💡 UPDATED: Replaced NDVI card with Plant Health Score card */}
+          {/* UPDATED: Plant Health Score Card with NaN fix */}
           <MetricCard 
             label="Plant Health Score" 
-            value={Math.round(healthScore) + "/100"} // Assuming healthScore is a number out of 100
+            value={Math.round(healthScore || 0) + "/100"} // Use `|| 0` to prevent NaN
             description="Overall crop vigor and resilience" 
-            icon={HeartPulse} // Changed icon to one that signifies health
+            icon={HeartPulse} 
           />
           <MetricCard label="Soil pH" value={ph} description="Nutrient absorption readiness" icon={FlaskConical} />
           <MetricCard label="Pest Risk" value={Math.round(pestRisk * 100) + "%"} description="Outbreak likelihood" icon={Bug} />

@@ -1,6 +1,7 @@
 // src/modules/generateRecommendations.js
 
-export function generateRecommendations({ ndmi, ndvi, ph, pestRisk, moisture }) {
+// UPDATED: Function accepts 'healthScore' instead of 'ndvi'
+export function generateRecommendations({ ndmi, healthScore, ph, pestRisk, moisture }) {
   const recs = [];
 
   // --- Watering logic (using NDMI + soil moisture %)
@@ -29,13 +30,14 @@ export function generateRecommendations({ ndmi, ndvi, ph, pestRisk, moisture }) 
     });
   }
 
-  // --- Plant vigor (NDVI)
-  if (ndvi < 0.35) {
+  // --- Plant vigor (Health Score)
+  // UPDATED: Logic uses healthScore (0-100) thresholds (35 and 65)
+  if (healthScore < 35) { 
     recs.push({
       title: "Low Vegetation Vigor Detected",
       body: "Consider nitrogen-rich compost tea or mild organic fertilizers. Ensure consistent watering."
     });
-  } else if (ndvi > 0.65) {
+  } else if (healthScore > 65) { 
     recs.push({
       title: "Strong Vegetation Health",
       body: "No immediate intervention required. Continue current irrigation schedule."
@@ -52,14 +54,6 @@ export function generateRecommendations({ ndmi, ndvi, ph, pestRisk, moisture }) 
     recs.push({
       title: "Moderate Pest Activity",
       body: "Monitor plants daily. Remove damaged leaves and keep soil well-aerated."
-    });
-  }
-
-  // --- If no issues detected:
-  if (recs.length === 0) {
-    recs.push({
-      title: "All Systems Healthy",
-      body: "Your plant ecosystem is stable. Keep monitoring daily."
     });
   }
 
