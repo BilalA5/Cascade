@@ -2,6 +2,8 @@
 import React from "react";
 import MetricCard from "./metriccard.jsx";
 import SensorChart from "./sensorchart.jsx";
+import CarbonInsight from "./CarbonInsight.jsx"
+import WeatherInsight from "./WeatherInsight.jsx"
 import Recommendations from "./recommendations.jsx";
 import Button from "./button.jsx"; 
 import { Droplets, HeartPulse, FlaskConical, Bug } from "lucide-react";
@@ -15,6 +17,11 @@ export default function Report({
   insightsError,
   insightsErrorMessage,
   recommendations,
+  carbonSummary,
+  weatherSummary,
+  carbonError,
+  weatherError,
+  externalLoading,
 }) {
   const {
     ndmiDisplay,
@@ -97,6 +104,23 @@ export default function Report({
           label="Plant Health Score Trend" 
           loading={loading}
         />
+      </div>
+
+      {/* AI RECOMMENDATIONS */}
+      <div style={{ marginTop: "40px" }}>
+        <h2 className="section-title">Sustainability & Weather Context</h2>
+        <div className="grid-2" style={{ gap: "20px" }}>
+          <CarbonInsight
+            summary={carbonSummary}
+            error={carbonError}
+            loading={externalLoading}
+          />
+          <WeatherInsight
+            summary={weatherSummary}
+            error={weatherError}
+            loading={externalLoading}
+          />
+        </div>
       </div>
 
       {/* AI RECOMMENDATIONS */}

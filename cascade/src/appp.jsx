@@ -2,12 +2,11 @@ import React, { useMemo, useState } from 'react'
 import Home from './home.jsx'
 import Report from './report.jsx'
 import './theme.css'
-import {
-  useCascadeReadings,
-  useLatestReading,
-} from './hooks/useCascadeReadings'
+import { useCascadeReadings, useLatestReading } from './hooks/useCascadeReadings'
 import { useGeminiInsights } from './hooks/useGeminiInsights'
 import generateFallbackRecommendations from './generateRecommendations.jsx.jsx'
+import { useCarbonEstimate, useCarbonProjects } from './hooks/useCarbonInsights'
+import { useCurrentWeather, useWeatherForecast } from './hooks/useWeatherInsights'
 
 const DEFAULT_DEVICE_ID = 'ESP32_01'
 
@@ -162,6 +161,62 @@ export default function App() {
     })
   }, [geminiInsights, snapshot])
 
+  const {
+    data: carbonEstimate,
+    isLoading: carbonLoading,
+    isError: carbonError,
+    error: carbonErrorObject,
+  } = useCarbonEstimate()
+
+  const {
+    data: carbonProjects,
+    isLoading: projectsLoading,
+    isError: projectsError,
+    error: projectsErrorObject,
+  } = useCarbonProjects()
+
+  const {
+    data: currentWeather,
+    isLoading: weatherLoading,
+    isError: weatherError,
+    error: weatherErrorObject,
+  } = useCurrentWeather()
+
+  const {
+    data: weatherForecast,
+    isLoading: forecastLoading,
+    isError: forecastError,
+    error: forecastErrorObject,
+  } = useWeatherForecast()
+
+  const carbonSummary = useMemo(() => {
+    if (!carbonEstimate) return null
+    const topProject = Array.isArray(carbonProjects) ? carbonProjects[0] : null
+    return {
+      estimate: carbonEstimate,
+      project: topProject
+        ? {
+            id: topProject.id,
+            name: topProject?.attributes?.name ?? 'Carbon project',
+            country: topProject?.attributes?.country,
+            shortDescription: topProject?.attributes?.short_description,
+            climateActionType: topProject?.attributes?.climate_action_type,
+          }
+        : null,
+    }
+  }, [carbonEstimate, carbonProjects])
+
+  const weatherSummary = useMemo(() => {
+    if (!currentWeather) return null
+    return {
+      current: currentWeather,
+      forecast: weatherForecast,
+    }
+  }, [currentWeather, weatherForecast])
+
+  const externalLoading =
+    carbonLoading || projectsLoading || weatherLoading || forecastLoading
+
   const loading = latestLoading || readingsLoading
 
   return (
@@ -175,12 +230,30 @@ export default function App() {
           insightsError={insightsError}
           insightsErrorMessage={insightsErrorObject?.message}
           recommendations={recommendations}
+          carbonSummary={carbonSummary}
+          weatherSummary={weatherSummary}
+          carbonError={
+            carbonError ? carbonErrorObject?.message : projectsErrorObject?.message
+          }
+          weatherError={
+            weatherError ? weatherErrorObject?.message : forecastErrorObject?.message
+          }
+          externalLoading={externalLoading}
         />
       ) : (
         <Home
           latestSnapshot={snapshot}
           onGenerate={() => setShowReport(true)}
           loading={loading}
+          carbonSummary={carbonSummary}
+          weatherSummary={weatherSummary}
+          carbonError={
+            carbonError ? carbonErrorObject?.message : projectsErrorObject?.message
+          }
+          weatherError={
+            weatherError ? weatherErrorObject?.message : forecastErrorObject?.message
+          }
+          externalLoading={externalLoading}
         />
       )}
     </div>

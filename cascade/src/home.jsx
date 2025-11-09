@@ -3,11 +3,21 @@ import React from "react";
 import Button from "./button.jsx";
 import MetricCard from "./metriccard.jsx";
 import LiquidEther from './LiquidEther'; 
+import CarbonInsight from './CarbonInsight.jsx'
+import WeatherInsight from './WeatherInsight.jsx'
 import "./theme.css";
-// Updated: Swapped 'Leaf' for 'HeartPulse' for a health-related icon
 import { Droplets, HeartPulse, FlaskConical, Bug } from "lucide-react"; 
 
-export default function Home({ onGenerate, latestSnapshot, loading }) {
+export default function Home({
+  onGenerate,
+  latestSnapshot,
+  loading,
+  carbonSummary,
+  weatherSummary,
+  carbonError,
+  weatherError,
+  externalLoading,
+}) {
   const {
     ndmiDisplay,
     healthScore,
@@ -117,6 +127,22 @@ export default function Home({ onGenerate, latestSnapshot, loading }) {
             icon={Bug}
             detail={pestDetail}
           />
+        </div>
+
+        <div style={{ marginTop: '36px' }}>
+          <h2 className="section-title">Environmental Conditions</h2>
+          <div className="grid-2" style={{ gap: '20px' }}>
+            <CarbonInsight
+              summary={carbonSummary}
+              error={carbonError}
+              loading={externalLoading}
+            />
+            <WeatherInsight
+              summary={weatherSummary}
+              error={weatherError}
+              loading={externalLoading}
+            />
+          </div>
         </div>
 
       </div>
