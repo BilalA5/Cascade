@@ -9,37 +9,67 @@ import {
 
 const DEFAULT_DEVICE_ID = 'ESP32_01'
 
+const toNumber = (value) => {
+  const numeric = Number(value)
+  return Number.isFinite(numeric) ? numeric : null
+}
+
+const clamp = (value, min, max) =>
+  Math.min(Math.max(value, min), max)
+
+const normalizePercent = (value) => {
+  const numeric = toNumber(value)
+  if (numeric === null) return null
+  return clamp(numeric, 0, 100)
+}
+
+const normalizeMoisture = (value) => {
+  const numeric = toNumber(value)
+  if (numeric === null) return null
+  return numeric > 1 ? normalizePercent(numeric) : normalizePercent(numeric * 100)
+}
+
+const normalizePestScore = (value) => {
+  const numeric = toNumber(value)
+  if (numeric === null) {
+    return { ratio: null, percent: null }
+  }
+
+  const ratio = clamp(numeric > 1 ? numeric / 100 : numeric, 0, 1)
+  const percent = clamp(ratio * 100, 0, 100)
+
+  return { ratio, percent }
+}
+
 const buildSnapshot = (reading) => {
   if (!reading) {
     return {
-      ndmi: '—',
+      ndmi: 0,
+      ndmiDisplay: '—',
       healthScore: 0,
       ph: '—',
       pestRisk: 0,
+      pestPercent: null,
       moisture: 0,
+      moisturePercent: null,
     }
   }
 
-  const moistureValue = Number(
-    reading.moisturePct ??
-      reading.moisture ??
-      0
+  const moisturePercent =
+    normalizeMoisture(reading.moisture_pct ?? reading.moisturePct ?? reading.moisture) ?? 0
+  const { ratio: pestRisk, percent: pestPercent } = normalizePestScore(
+    reading.pestScore ?? reading.pest_score ?? reading.pestRisk
   )
 
-  const pestScoreRaw =
-    reading.pestScore ?? 0
-  const pestRisk =
-    pestScoreRaw > 1
-      ? pestScoreRaw / 100
-      : pestScoreRaw
-
   return {
-    ndmi: moistureValue.toFixed(1),
-    healthScore:
-      reading.healthScore ?? moistureValue,
+    ndmi: moisturePercent / 100,
+    ndmiDisplay: `${moisturePercent.toFixed(1)}%`,
+    healthScore: reading.healthScore ?? moisturePercent,
     ph: reading.ph ?? 6.5,
-    pestRisk,
-    moisture: moistureValue,
+    pestRisk: pestRisk ?? 0,
+    pestPercent,
+    moisture: moisturePercent,
+    moisturePercent,
   }
 }
 
@@ -49,10 +79,11 @@ const buildHistory = (items = []) =>
       ? new Date(item.timestamp).toLocaleTimeString()
       : '',
     moisture:
-      item.moisturePct ??
-      item.moisture ??
-      0,
-    healthScore: item.healthScore ?? 0,
+      normalizeMoisture(item.moisture_pct ?? item.moisturePct ?? item.moisture) ?? 0,
+    moisturePercent: normalizeMoisture(item.moisture_pct ?? item.moisturePct ?? item.moisture),
+    pestRisk: normalizePestScore(item.pest_score ?? item.pestRisk).ratio ?? 0,
+    pestPercent: normalizePestScore(item.pest_score ?? item.pestRisk).percent,
+    healthScore: item.healthScore ?? item.health_score ?? 0,
   }))
 
 export default function App() {
