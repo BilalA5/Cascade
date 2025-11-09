@@ -7,9 +7,9 @@ const readEnv = (key) => {
 
 const API_KEY = readEnv('VITE_OPENWEATHER_API_KEY')
 const DEFAULT_LATITUDE =
-  Number(readEnv('VITE_SITE_LATITUDE')) || 40.7128
+  Number(readEnv('VITE_SITE_LATITUDE')) || 51.0447
 const DEFAULT_LONGITUDE =
-  Number(readEnv('VITE_SITE_LONGITUDE')) || -74.006
+  Number(readEnv('VITE_SITE_LONGITUDE')) || -114.0719
 const API_BASE = 'https://api.openweathermap.org/data/2.5'
 
 const ensureApiKey = () => {
