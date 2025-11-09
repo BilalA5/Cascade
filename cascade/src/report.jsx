@@ -13,6 +13,7 @@ export default function Report({
   onBack,
   loading,
   insightsError,
+  insightsErrorMessage,
   recommendations,
 }) {
   const {
@@ -105,6 +106,14 @@ export default function Report({
             <h3 style={{ fontSize: "18px", marginBottom: "8px" }}>AI insight unavailable</h3>
             <p style={{ color: "var(--text-subtle)" }}>
               Gemini could not generate a response. Showing fallback guidance based on field thresholds.
+              {insightsErrorMessage && (
+                <>
+                  {' '}
+                  <span style={{ display: 'block', marginTop: '8px', fontSize: '0.85rem' }}>
+                    Details: {insightsErrorMessage}
+                  </span>
+                </>
+              )}
             </p>
           </div>
         )}
