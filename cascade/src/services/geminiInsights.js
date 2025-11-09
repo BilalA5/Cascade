@@ -40,9 +40,31 @@ Do not include any leading text, Markdown, or explanations—only the JSON array
 `
 }
 
+const stripCodeFences = (text) => {
+  const trimmed = text.trim()
+  if (trimmed.startsWith('```')) {
+    const withoutFence = trimmed.replace(/^```(?:json)?/i, '')
+    const closingIndex = withoutFence.lastIndexOf('```')
+    return closingIndex >= 0
+      ? withoutFence.slice(0, closingIndex).trim()
+      : withoutFence.trim()
+  }
+  return trimmed
+}
+
+const extractJsonSegment = (text) => {
+  const start = text.indexOf('[')
+  const end = text.lastIndexOf(']')
+  if (start === -1 || end === -1 || end <= start) {
+    return text
+  }
+  return text.slice(start, end + 1)
+}
+
 const parseJsonArray = (text) => {
   try {
-    const parsed = JSON.parse(text)
+    const cleaned = extractJsonSegment(stripCodeFences(text))
+    const parsed = JSON.parse(cleaned)
     if (Array.isArray(parsed)) {
       return parsed
         .filter((item) => item && item.title && item.body)
@@ -55,7 +77,7 @@ const parseJsonArray = (text) => {
 }
 
 const parseFallback = (text) => {
-  return text
+  return stripCodeFences(text)
     .split('\n')
     .map((line) => line.trim().replace(/^[*-]\s*/, ''))
     .filter(Boolean)
