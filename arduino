@@ -1,0 +1,110 @@
+#Hardware and code done by Shayan Shaikh and Saifullah Asad
+#This code will connect the hardware, gather information such as moisture, and pest scores. It then uploads this information to the aws cloud
+#include <WiFi.h>
+#include <WiFiClientSecure.h>
+#include <HTTPClient.h>
+#include <time.h>
+
+// ====== YOUR HOTSPOT WIFI ======
+const char* WIFI_SSID = "Saif";
+const char* WIFI_PASS = "Saif6338!";
+
+// ====== CASCADE API ENDPOINT ======
+const char* API_URL = "https://mo25xwmo62.execute-api.us-east-2.amazonaws.com/ingest";
+
+// ====== SENSOR PINS ======
+#define MOISTURE_PIN 34
+#define PIR_PIN 27
+
+// ====== CALIBRATION VALUES ======
+const int RAW_AIR = 2500;  // dry air
+const int RAW_WET = 1325;  // fully wet soil
+
+// ====== SEND EVERY 1 MINUTE ======
+unsigned long lastSend = 0;
+const unsigned long SEND_INTERVAL = 60000;
+
+// Convert analog → moisture %
+float moistureFromRaw(int raw) {
+  float pct = (float(RAW_AIR - raw) / float(RAW_AIR - RAW_WET)) * 100.0f;
+  return constrain(pct, 0, 100);
+}
+
+// Compute pest score
+float computePestScore(bool pir, float moisture) {
+  float dryness = 1.0 - (moisture / 100.0);
+  float score = (pir ? 0.6 : 0.0) + (dryness * 0.4);
+  return constrain(score, 0, 1);
+}
+
+// Compute plant health
+float computeHealth(float moisture, float pest) {
+  float health = 100.0;
+  if (moisture < 40) health -= (40 - moisture) * 1.5;
+  if (moisture > 85) health -= (moisture - 85) * 1.2;
+  health -= pest * 35;
+  return constrain(health, 0, 100);
+}
+
+// Format current time as ISO8601
+String getTimestamp() {
+  time_t now = time(NULL);
+  struct tm tinfo;
+  gmtime_r(&now, &tinfo);
+  char buf[30];
+  strftime(buf, sizeof(buf), "%Y-%m-%dT%H:%M:%SZ", &tinfo);
+  return String(buf);
+}
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(PIR_PIN, INPUT);
+
+  Serial.println(" Connecting to Wi-Fi...");
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+  while (WiFi.status() != WL_CONNECTED) { Serial.print("."); delay(300); }
+  Serial.println("\nWi-Fi Connected");
+
+  Serial.println("⏱ Syncing UTC time...");
+  configTime(0, 0, "pool.ntp.org", "time.nist.gov");
+  while (time(NULL) < 1700000000) delay(200);
+
+  Serial.println(" Cascade Cloud Uplink Active");
+}
+
+void loop() {
+  if (millis() - lastSend >= SEND_INTERVAL) {
+    lastSend = millis();
+
+    int raw = analogRead(MOISTURE_PIN);
+    float moisture = moistureFromRaw(raw);
+    bool pir = digitalRead(PIR_PIN) == HIGH;
+    float pest = computePestScore(pir, moisture);
+    float health = computeHealth(moisture, pest);
+    String timestamp = getTimestamp();
+
+    WiFiClientSecure client;
+    client.setInsecure(); // allow HTTPS without cert
+
+    HTTPClient http;
+    http.begin(client, API_URL);
+    http.addHeader("Content-Type", "application/json");
+
+    // ---- Payload we send to Cascade API ----
+    String payload = "{"
+      "\"device_id\":\"ESP32_01\","
+      "\"timestamp\":\"" + timestamp + "\","
+      "\"moisture\":" + String(moisture, 1) + ","
+      "\"pest_score\":" + String(pest, 2) + ","
+      "\"health_score\":" + String(health, 1) +
+    "}";
+
+    Serial.println("Sending: " + payload);
+
+    int code = http.POST(payload);
+    Serial.printf(" Response Code: %d\n", code);
+    http.end();
+  }
+
+  delay(100);
+}
