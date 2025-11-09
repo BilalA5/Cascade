@@ -1,6 +1,27 @@
 // src/modules/generateRecommendations.js
 
 // UPDATED: Function accepts 'healthScore' instead of 'ndvi'
+const MAX_FALLBACK_RECS = 4
+
+const fallbackLibrary = [
+  {
+    title: "Schedule Moisture Check",
+    body: "Verify soil moisture sensors are calibrated and confirm readings with a manual probe once per week.",
+  },
+  {
+    title: "Scout for Pest Patterns",
+    body: "Walk the field in a zigzag pattern every 48 hours to check undersides of leaves and base of stems.",
+  },
+  {
+    title: "Record Field Notes",
+    body: "Log rainfall, fertigation, and observed pest pressure in a field journal to compare against sensor trends.",
+  },
+  {
+    title: "Review Irrigation Hardware",
+    body: "Inspect emitters and drip lines for clogs or leaks to ensure uniform water delivery.",
+  },
+]
+
 export function generateFallbackRecommendations({ ndmi, healthScore, ph, pestRisk, moisture }) {
   const recs = [];
 
@@ -55,6 +76,15 @@ export function generateFallbackRecommendations({ ndmi, healthScore, ph, pestRis
       title: "Moderate Pest Activity",
       body: "Monitor plants daily. Remove damaged leaves and keep soil well-aerated."
     });
+  }
+
+  let fallbackIndex = 0
+  while (recs.length < MAX_FALLBACK_RECS && fallbackIndex < fallbackLibrary.length) {
+    const candidate = fallbackLibrary[fallbackIndex]
+    if (!recs.find((item) => item.title === candidate.title)) {
+      recs.push(candidate)
+    }
+    fallbackIndex += 1
   }
 
   return recs;
