@@ -3,7 +3,7 @@ import React from "react";
 import Button from "./button.jsx";
 import MetricCard from "./metriccard.jsx";
 import LiquidEther from './LiquidEther'; 
-import CarbonInsight from './CarbonInsight.jsx'
+import WeatherInsight from './WeatherInsight.jsx'
 import "./theme.css";
 import { Droplets, HeartPulse, FlaskConical, Bug } from "lucide-react"; 
 
@@ -11,8 +11,8 @@ export default function Home({
   onGenerate,
   latestSnapshot,
   loading,
-  carbonSummary,
-  carbonError,
+  weatherSummary,
+  weatherError,
   externalLoading,
 }) {
   const {
@@ -128,9 +128,9 @@ export default function Home({
 
         <div style={{ marginTop: '36px' }}>
           <h2 className="section-title">Environmental Conditions</h2>
-          <CarbonInsight
-            summary={carbonSummary}
-            error={carbonError}
+          <WeatherInsight
+            summary={weatherSummary}
+            error={weatherError}
             loading={externalLoading}
           />
         </div>

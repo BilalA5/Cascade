@@ -2,7 +2,7 @@
 import React from "react";
 import MetricCard from "./metriccard.jsx";
 import SensorChart from "./sensorchart.jsx";
-import CarbonInsight from "./CarbonInsight.jsx"
+import WeatherInsight from "./WeatherInsight.jsx"
 import Recommendations from "./recommendations.jsx";
 import Button from "./button.jsx"; 
 import { Droplets, HeartPulse, FlaskConical, Bug } from "lucide-react";
@@ -16,8 +16,8 @@ export default function Report({
   insightsError,
   insightsErrorMessage,
   recommendations,
-  carbonSummary,
-  carbonError,
+  weatherSummary,
+  weatherError,
   externalLoading,
 }) {
   const {
@@ -103,12 +103,12 @@ export default function Report({
         />
       </div>
 
-      {/* AI RECOMMENDATIONS */}
+      {/* Environmental Context */}
       <div style={{ marginTop: "40px" }}>
-        <h2 className="section-title">Sustainability Context</h2>
-        <CarbonInsight
-          summary={carbonSummary}
-          error={carbonError}
+        <h2 className="section-title">Weather Outlook</h2>
+        <WeatherInsight
+          summary={weatherSummary}
+          error={weatherError}
           loading={externalLoading}
         />
       </div>

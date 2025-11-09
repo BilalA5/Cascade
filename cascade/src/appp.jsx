@@ -5,7 +5,7 @@ import './theme.css'
 import { useCascadeReadings, useLatestReading } from './hooks/useCascadeReadings'
 import { useGeminiInsights } from './hooks/useGeminiInsights'
 import generateFallbackRecommendations from './generateRecommendations.jsx.jsx'
-import { useCarbonEstimate, useCarbonProjects } from './hooks/useCarbonInsights'
+import { useCurrentWeather, useWeatherForecast } from './hooks/useWeatherInsights'
 
 const DEFAULT_DEVICE_ID = 'ESP32_01'
 
@@ -130,35 +130,26 @@ export default function App() {
   )
 
   const {
-    data: carbonEstimate,
-    isLoading: carbonLoading,
-    isError: carbonError,
-    error: carbonErrorObject,
-  } = useCarbonEstimate()
+    data: currentWeather,
+    isLoading: weatherLoading,
+    isError: weatherError,
+    error: weatherErrorObject,
+  } = useCurrentWeather()
 
   const {
-    data: carbonProjects,
-    isLoading: projectsLoading,
-    isError: projectsError,
-    error: projectsErrorObject,
-  } = useCarbonProjects()
+    data: weatherForecast,
+    isLoading: forecastLoading,
+    isError: forecastError,
+    error: forecastErrorObject,
+  } = useWeatherForecast()
 
-  const carbonSummary = useMemo(() => {
-    if (!carbonEstimate) return null
-    const topProject = Array.isArray(carbonProjects) ? carbonProjects[0] : null
+  const weatherSummary = useMemo(() => {
+    if (!currentWeather) return null
     return {
-      estimate: carbonEstimate,
-      project: topProject
-        ? {
-            id: topProject.id,
-            name: topProject?.attributes?.name ?? 'Carbon project',
-            country: topProject?.attributes?.country,
-            shortDescription: topProject?.attributes?.short_description,
-            climateActionType: topProject?.attributes?.climate_action_type,
-          }
-        : null,
+      current: currentWeather,
+      forecast: weatherForecast,
     }
-  }, [carbonEstimate, carbonProjects])
+  }, [currentWeather, weatherForecast])
 
   const geminiMetrics =
     snapshot.moisturePercent !== null
@@ -168,18 +159,13 @@ export default function App() {
           ph: snapshot.ph,
           recentMoisture: moistureSeries,
           recentPest: pestSeries,
-          carbon: carbonSummary?.estimate
+          weather: weatherSummary?.current
             ? {
-                carbonKg: carbonSummary.estimate.carbonKg,
-                carbonMt: carbonSummary.estimate.carbonMt,
-                electricity: {
-                  value: carbonSummary.estimate.electricityValue,
-                  unit: carbonSummary.estimate.electricityUnit,
-                },
-                location: {
-                  country: carbonSummary.estimate.country,
-                  state: carbonSummary.estimate.state,
-                },
+                temperature: weatherSummary.current.temperature,
+                humidity: weatherSummary.current.humidity,
+                windSpeed: weatherSummary.current.windSpeed,
+                description: weatherSummary.current.description,
+                forecast: weatherSummary.forecast?.hourly ?? [],
               }
             : null,
         }
@@ -205,7 +191,7 @@ export default function App() {
     })
   }, [geminiInsights, snapshot])
 
-  const externalLoading = carbonLoading || projectsLoading
+  const externalLoading = weatherLoading || forecastLoading
 
   const loading = latestLoading || readingsLoading
 
@@ -220,9 +206,9 @@ export default function App() {
           insightsError={insightsError}
           insightsErrorMessage={insightsErrorObject?.message}
           recommendations={recommendations}
-          carbonSummary={carbonSummary}
-          carbonError={
-            carbonError ? carbonErrorObject?.message : projectsErrorObject?.message
+          weatherSummary={weatherSummary}
+          weatherError={
+            weatherError ? weatherErrorObject?.message : forecastErrorObject?.message
           }
           externalLoading={externalLoading}
         />
@@ -231,9 +217,9 @@ export default function App() {
           latestSnapshot={snapshot}
           onGenerate={() => setShowReport(true)}
           loading={loading}
-          carbonSummary={carbonSummary}
-          carbonError={
-            carbonError ? carbonErrorObject?.message : projectsErrorObject?.message
+          weatherSummary={weatherSummary}
+          weatherError={
+            weatherError ? weatherErrorObject?.message : forecastErrorObject?.message
           }
           externalLoading={externalLoading}
         />
