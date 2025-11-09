@@ -7,9 +7,9 @@ import "./theme.css";
 // Updated: Swapped 'Leaf' for 'HeartPulse' for a health-related icon
 import { Droplets, HeartPulse, FlaskConical, Bug } from "lucide-react"; 
 
-export default function Home({ onGenerate, latestSnapshot }) {
+export default function Home({ onGenerate, latestSnapshot, loading }) {
   // UPDATED: Replaced 'ndvi' with 'healthScore' in destructuring
-  const { ndmi, healthScore, ph, pestRisk } = latestSnapshot; 
+  const { ndmi, healthScore, ph, pestRisk } = latestSnapshot || {}; 
 
   return (
     <> {/* Use Fragment to wrap the two top-level divs */}
@@ -65,6 +65,7 @@ export default function Home({ onGenerate, latestSnapshot }) {
             <Button
               variant="ghost" 
               onClick={onGenerate}
+              disabled={loading}
               style={{ 
                   width: '100%', 
                   fontSize: "24px", 
@@ -79,16 +80,16 @@ export default function Home({ onGenerate, latestSnapshot }) {
 
         {/* Metrics */}
         <div className="grid-4 metrics-section" style={{ marginTop: "50px" }}>
-          <MetricCard label="NDMI (Moisture)" value={ndmi} description="Root zone water availability" icon={Droplets} />
+          <MetricCard label="NDMI (Moisture)" value={loading ? "…" : ndmi} description="Root zone water availability" icon={Droplets} />
           {/* UPDATED: Plant Health Score Card with NaN fix */}
           <MetricCard 
             label="Plant Health Score" 
-            value={Math.round(healthScore || 0) + "/100"} // Use `|| 0` to prevent NaN
+            value={loading ? "…" : Math.round(healthScore || 0) + "/100"} // Use `|| 0` to prevent NaN
             description="Overall crop vigor and resilience" 
             icon={HeartPulse} 
           />
-          <MetricCard label="Soil pH" value={ph} description="Nutrient absorption readiness" icon={FlaskConical} />
-          <MetricCard label="Pest Risk" value={Math.round(pestRisk * 100) + "%"} description="Outbreak likelihood" icon={Bug} />
+          <MetricCard label="Soil pH" value={loading ? "…" : ph} description="Nutrient absorption readiness" icon={FlaskConical} />
+          <MetricCard label="Pest Risk" value={loading ? "…" : Math.round((pestRisk || 0) * 100) + "%"} description="Outbreak likelihood" icon={Bug} />
         </div>
 
       </div>
