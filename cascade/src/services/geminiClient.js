@@ -5,7 +5,7 @@ const API_KEY =
 const DEFAULT_MODEL =
   import.meta.env.VITE_GEMINI_MODEL ??
   (typeof process !== 'undefined' ? process.env.VITE_GEMINI_MODEL : undefined) ??
-  'gemini-1.5-flash'
+  'gemini-2.0-flash'
 
 const BASE_URL = 'https://generativelanguage.googleapis.com/v1/models'
 
