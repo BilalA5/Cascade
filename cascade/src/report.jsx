@@ -10,7 +10,7 @@ import { Droplets, HeartPulse, FlaskConical, Bug } from "lucide-react";
 import { generateRecommendations } from "./generateRecommendations.jsx";
 import "./theme.css";
 
-export default function Report({ snapshot, historyData, onBack }) {
+export default function Report({ snapshot, historyData, onBack, loading }) {
   // UPDATED: Destructure 'healthScore' instead of 'ndvi'
   const { ndmi, healthScore, ph, pestRisk, moisture } = snapshot;
 
@@ -41,7 +41,7 @@ export default function Report({ snapshot, historyData, onBack }) {
       <div className="grid-4" style={{ marginTop: "20px" }}>
         <MetricCard
           label="NDMI (Soil Moisture)"
-          value={ndmi}
+          value={loading ? "…" : ndmi}
           description="Water stored in root zone"
           icon={Droplets}
         />
@@ -49,21 +49,21 @@ export default function Report({ snapshot, historyData, onBack }) {
         {/* UPDATED: Plant Health Score Card */}
         <MetricCard 
             label="Plant Health Score" 
-            value={Math.round(healthScore || 0) + "/100"}
+            value={loading ? "…" : Math.round(healthScore || 0) + "/100"}
             description="Overall crop vigor and resilience" 
             icon={HeartPulse} 
         />
 
         <MetricCard
           label="Soil pH"
-          value={ph}
+          value={loading ? "…" : ph}
           description="Nutrient availability"
           icon={FlaskConical}
         />
 
         <MetricCard
           label="Pest Risk"
-          value={Math.round(pestRisk * 100) + "%"}
+          value={loading ? "…" : Math.round((pestRisk || 0) * 100) + "%"}
           description="Projected 48h outbreak probability"
           icon={Bug}
         />
@@ -75,6 +75,7 @@ export default function Report({ snapshot, historyData, onBack }) {
           data={historyData}
           dataKey="moisture"
           label="Soil Moisture Trend (Last 24h)"
+          loading={loading}
         />
 
         <SensorChart
@@ -82,6 +83,7 @@ export default function Report({ snapshot, historyData, onBack }) {
           // UPDATED: Changed dataKey and label for the trend chart
           dataKey="healthScore"
           label="Plant Health Score Trend" 
+          loading={loading}
         />
       </div>
 
