@@ -19,7 +19,7 @@ export const getGeminiClient = () => {
 
 export const getGeminiModel = () => {
   if (!model) {
-    model = getGeminiClient().getGenerativeModel({ model: 'gemini-1.5-flash' })
+    model = getGeminiClient().getGenerativeModel({ model: 'gemini-1.5-pro-latest' })
   }
   return model
 }
