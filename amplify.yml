@@ -1,0 +1,19 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - cd cascade
+        - npm ci
+    build:
+      commands:
+        - cd cascade
+        - npm run build
+  artifacts:
+    baseDirectory: cascade/dist
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - cascade/node_modules/**/*
+
