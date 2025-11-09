@@ -27,7 +27,7 @@ export default function WeatherInsight({ summary, error, loading }) {
   const nextHours = forecast?.hourly?.slice(0, 3) ?? []
 
   return (
-    <div className="card">
+    <div className="card" style={{ textAlign: 'center' }}>
       <h3 style={{ fontSize: '18px', marginBottom: '8px' }}>
         Field Weather Outlook
       </h3>
@@ -39,8 +39,8 @@ export default function WeatherInsight({ summary, error, loading }) {
         </p>
       ) : (
         <>
-          <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-            <div>
+          <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <div style={{ minWidth: '160px' }}>
               <p style={{ color: 'var(--text-subtle)', fontSize: '0.8rem' }}>
                 Current temperature
               </p>
@@ -52,7 +52,7 @@ export default function WeatherInsight({ summary, error, loading }) {
                 {formatNumber(current?.humidity, 0)}%
               </p>
             </div>
-            <div>
+            <div style={{ minWidth: '160px' }}>
               <p style={{ color: 'var(--text-subtle)', fontSize: '0.8rem' }}>
                 Wind & pressure
               </p>
@@ -69,7 +69,7 @@ export default function WeatherInsight({ summary, error, loading }) {
             <p style={{ color: 'var(--text-subtle)', fontSize: '0.8rem' }}>
               Next few hours
             </p>
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
               {nextHours.length === 0 && (
                 <p style={{ color: 'var(--text-subtle)' }}>No forecast data available.</p>
               )}
