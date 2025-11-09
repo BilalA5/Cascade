@@ -1,4 +1,4 @@
-import { getGeminiModel } from './geminiClient'
+import { callGemini, getGeminiModel } from './geminiClient'
 
 const MAX_INSIGHTS = 3
 
@@ -92,8 +92,27 @@ export const fetchGeminiInsights = async (metrics) => {
   const model = getGeminiModel()
   const prompt = buildPrompt(metrics)
 
-  const response = await model.generateContent(prompt)
-  const text = response.response.text()
+  const data = await callGemini(
+    {
+      contents: [
+        {
+          role: 'user',
+          parts: [{ text: prompt }],
+        },
+      ],
+    },
+    model
+  )
+
+  const text =
+    data?.candidates?.[0]?.content?.parts
+      ?.map((part) => part.text ?? '')
+      .join('\n')
+      .trim() ?? ''
+
+  if (!text) {
+    throw new Error('Gemini returned an empty response')
+  }
 
   const parsed = parseJsonArray(text)
   if (parsed) {
