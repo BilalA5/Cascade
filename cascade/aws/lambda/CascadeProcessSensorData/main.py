@@ -18,7 +18,7 @@ def lambda_handler(event,context):
         body = json.loads(event.get("body", "{}"))
 
         #Validate Required Fields
-        required = ["device_id", "time_stamp", "moisture_pct", "pest_score", "health_score"]
+        required = ["device_id", "timestamp", "moisture", "pest_score", "health_score"]
         missing = [f for f in required if f not in body]
         if missing:
             return {
@@ -32,7 +32,7 @@ def lambda_handler(event,context):
         except ValueError:
             return {
                 "statusCode": 400,
-                "body": json.dumps({"error": "Invalid timestamp format."})
+                "body": json.dumps({"error": "Invalid timestamp format. Must be ISO8601 (e.g., 2025-11-09T01:35:24Z)."})
             }
         
         # Write to DynamoDB
@@ -42,7 +42,11 @@ def lambda_handler(event,context):
         return {
             "statusCode": 200,
             "body": json.dumps({"message": "Data stored successfully.", "item": body})
-        }    
+        }
+
     except Exception as e:
-            print("Error:", e)
-            return {"statusCode": 500, "body": json.dumps({"error": str(e)})}
+        print("Error:", e)
+        return {
+            "statusCode": 500,
+            "body": json.dumps({"error": str(e)})
+        }
