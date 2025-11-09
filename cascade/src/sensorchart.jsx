@@ -20,20 +20,22 @@ export default function SensorChart({ data, dataKey, label }) {
       <div style={{ flex: 1 }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
-            <XAxis dataKey="time" stroke="var(--text-subtle)" fontSize={12} />
-            <YAxis stroke="var(--text-subtle)" fontSize={12} />
+            {/* UPDATED: Axis color changed to light for contrast against dark green card background */}
+            <XAxis dataKey="time" stroke="#B2DFDB" fontSize={12} />
+            <YAxis stroke="#B2DFDB" fontSize={12} />
             <Tooltip
               contentStyle={{
-                background: "var(--panel)",
+                // Tooltip background remains light panel color and text is dark green
+                background: "var(--panel)", 
                 border: "1px solid var(--border)",
                 borderRadius: "8px",
-                color: "var(--text-main)"
+                color: "var(--text-main)" 
               }}
             />
             <Line
               type="monotone"
               dataKey={dataKey}
-              stroke="var(--highlight)"
+              stroke="#FFFFFF" // Line color is white for visibility
               strokeWidth={3}
               dot={false}
             />
@@ -42,4 +44,4 @@ export default function SensorChart({ data, dataKey, label }) {
       </div>
     </div>
   );
-} 
+}

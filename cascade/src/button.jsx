@@ -9,6 +9,8 @@ export default function Button({ children, onClick, variant = "primary", style =
     type = "btn-primary";
   } else if (variant === "secondary") {
     type = "btn-secondary";
+  } else if (variant === "ghost") {
+    type = "btn-ghost";
   }
 
   return (

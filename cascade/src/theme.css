@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 :root {
-    --bg: #04261b;
-    --panel: #0a3c2c;
-    --highlight: #1fd7a4;
-    --text-main: #e8fff4;
-    --text-subtle: #b8e8d6;
-    --border: rgba(255, 255, 255, 0.08);
+    --bg: #FFFFFF; /* White Background */
+    --panel: #E0F2F1; /* Very Light Teal Panel */
+    --highlight: rgb(0, 51, 51); /* Deep Forest Green Accent/Card Background */
+    --text-main: #004D00; /* Dark Green for global body text (Headings, primary text) */
+    --text-subtle: #eef5ee; /* NEW DEEPER MOSS GREEN for subtle text like this paragraph */
+    --border: rgba(0, 0, 0, 0.1);
 }
 
 * {
@@ -37,15 +37,17 @@
     z-index: 1; 
   }
   .card {
-    background: var(--panel);
-    border: 1px solid var(--border);
+    /* Uses the dark highlight color */
+    background: var(--highlight); 
+    color: #FFFFFF; /* White text for contrast */
+    border: 1px solid var(--highlight); 
     border-radius: 18px;
     padding: 18px;
     backdrop-filter: blur(12px);
-    box-shadow: 0px 10px 25px rgba(0,0,0,0.25);
+    box-shadow: 0px 10px 25px rgba(0, 51, 51, 0.4); 
     display: flex;
     flex-direction: column;
-    align-items: stretch; /* restores chart layout */
+    align-items: stretch; 
   }
   
   .btn {
@@ -54,28 +56,45 @@
     border: none;
     cursor: pointer;
     font-weight: 600;
-    transition: 0.2s;
+    transition: all 0.25s ease-in-out; 
   }
   
   .btn-primary {
     background: var(--highlight);
-    color: #00291f;
-    box-shadow: 0px 8px 16px rgba(31, 215, 164, 0.3);
+    color: #FFFFFF; 
+    box-shadow: 0px 8px 16px rgba(0, 51, 51, 0.3);
   }
   
   .btn-primary:hover {
-    filter: brightness(1.1);
+    transform: translateY(-2px); 
+    box-shadow: 0px 12px 25px rgba(0, 51, 51, 0.5); 
+    filter: brightness(1.05);
   }
 
-  /* NEW SECONDARY BUTTON STYLE */
+  /* GHOST BUTTON STYLE */
+  .btn-ghost {
+    background: transparent;
+    color: var(--highlight); 
+    border: 2px solid var(--highlight); 
+    box-shadow: none; 
+  }
+  
+  .btn-ghost:hover {
+    background: var(--highlight); 
+    color: #FFFFFF; 
+    transform: translateY(-2px); 
+    box-shadow: 0px 8px 16px rgba(0, 51, 51, 0.3); 
+  }
+
+  /* SECONDARY BUTTON STYLE (for Back button) */
   .btn-secondary {
     background: transparent;
-    color: var(--text-subtle);
+    color: var(--text-main); 
     border: 1px solid var(--border);
   }
 
   .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.05);
   }
   
   .section-title {
@@ -85,18 +104,7 @@
   }
   
   .metrics-section .card {
-    margin-bottom: 14px; /* reduced from 26px */
-  }
-  .card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 18px;
-    backdrop-filter: blur(12px);
-    box-shadow: 0px 10px 25px rgba(0,0,0,0.25);
-    display: flex;
-    flex-direction: column;
-    align-items: stretch; /* THIS MUST STAY */
+    margin-bottom: 14px;
   }
   
   /* Center ONLY metric cards (not charts) */

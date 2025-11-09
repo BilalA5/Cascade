@@ -6,7 +6,8 @@ export default function MetricCard({ label, value, description, icon: Icon }) {
   return (
     <div className="card" style={{ textAlign: "center", alignItems: "center" }}>
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", fontWeight: 700 }}>
-        {Icon && <Icon size={18} color="var(--highlight)" />}
+        {/* UPDATED ICON COLOR */}
+        {Icon && <Icon size={18} color="#FFFFFF" />}
         {label}
       </div>
 
@@ -14,7 +15,7 @@ export default function MetricCard({ label, value, description, icon: Icon }) {
         {value}
       </div>
 
-      <div style={{ color: "var(--text-subtle)", fontSize: "14px", marginTop: "4px" }}>
+      <div style={{ color: "#B2DFDB", fontSize: "14px", marginTop: "4px" }}>
         {description}
       </div>
     </div>

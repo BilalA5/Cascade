@@ -4,10 +4,13 @@ import Button from "./button.jsx";
 import MetricCard from "./metriccard.jsx";
 import LiquidEther from './LiquidEther'; 
 import "./theme.css";
-import { Droplets, Leaf, FlaskConical, Bug } from "lucide-react";
+// I'm changing 'Leaf' to 'HeartPulse' for a health-related icon (you might need to install 'lucide-react')
+// If you prefer the old Leaf icon, you can change 'HeartPulse' back to 'Leaf'
+import { Droplets, HeartPulse, FlaskConical, Bug } from "lucide-react"; 
 
 export default function Home({ onGenerate, latestSnapshot }) {
-  const { ndmi, ndvi, ph, pestRisk } = latestSnapshot;
+  //  UPDATED: Replaced 'ndvi' with 'healthScore' in destructuring
+  const { ndmi, healthScore, ph, pestRisk } = latestSnapshot; 
 
   return (
     <> {/* Use Fragment to wrap the two top-level divs */}
@@ -25,8 +28,8 @@ export default function Home({ onGenerate, latestSnapshot }) {
         }}
       >
         <LiquidEther
-          // Hazel Yellow Colors
-          colors={['#DDA35A', '#EED295', '#B8860B']}
+          // **UPDATED TO DARK GREEN/WHITE SHADES**
+          colors={['#004D40', '#00796B', '#FFFFFF']}
           mouseForce={20}
           cursorSize={100}
           isViscous={false}
@@ -50,30 +53,40 @@ export default function Home({ onGenerate, latestSnapshot }) {
         {/* Hero Content */}
         <div style={{ paddingBottom: '30px' }}>
           <h1 style={{ fontSize: "38px", fontWeight: "700", marginBottom: "12px" }}>
-            Grow Smarter with AI Sensor Sustainability
+            Grow Smarter with CASCADE
           </h1>
 
-          <p style={{ maxWidth: "650px", margin: "0 auto", fontSize: "17px", lineHeight: "1.6", color: "var(--text-subtle)" }}>
+          <p style={{ maxWidth: "650px", margin: "0 auto", fontSize: "17px", lineHeight: "1.6", color: "#004D00" }}>
             Cascade analyzes your real crop & soil through AI backed sensors to generate accurate,
-            real time field health reports tailored for sustainability recommendations.
+            real time field health reports tailored for sustainability
           </p>
 
-          <Button
-            variant="primary"
-            onClick={onGenerate}
-            style={{ marginTop: "32px", fontSize: "22px", padding: "16px 40px", borderRadius: "18px" }}
-          >
-            Generate Report
-          </Button>
-
-          {/* PLANT ANIMATION REMOVED HERE */}
-
+          <div style={{ maxWidth: '600px', margin: '40px auto 0 auto' }}>
+            <Button
+              variant="ghost" 
+              onClick={onGenerate}
+              style={{ 
+                  width: '100%', 
+                  fontSize: "24px", 
+                  padding: "20px 0px", 
+                  borderRadius: "18px",
+              }}
+            >
+              Generate Report
+            </Button>
+          </div>
         </div>
 
         {/* Metrics */}
         <div className="grid-4 metrics-section" style={{ marginTop: "50px" }}>
           <MetricCard label="NDMI (Moisture)" value={ndmi} description="Root zone water availability" icon={Droplets} />
-          <MetricCard label="NDVI (Vegetation)" value={ndvi} description="Photosynthetic vigor" icon={Leaf} />
+          {/* 💡 UPDATED: Replaced NDVI card with Plant Health Score card */}
+          <MetricCard 
+            label="Plant Health Score" 
+            value={Math.round(healthScore) + "/100"} // Assuming healthScore is a number out of 100
+            description="Overall crop vigor and resilience" 
+            icon={HeartPulse} // Changed icon to one that signifies health
+          />
           <MetricCard label="Soil pH" value={ph} description="Nutrient absorption readiness" icon={FlaskConical} />
           <MetricCard label="Pest Risk" value={Math.round(pestRisk * 100) + "%"} description="Outbreak likelihood" icon={Bug} />
         </div>
