@@ -26,11 +26,22 @@ export default function WeatherInsight({ summary, error, loading }) {
 
   const nextHours = forecast?.hourly?.slice(0, 3) ?? []
 
+  const locationLabel =
+    current?.locationName ??
+    (typeof summary?.parameters?.lat === 'number' && typeof summary?.parameters?.lon === 'number'
+      ? `Lat ${summary.parameters.lat}, Lon ${summary.parameters.lon}`
+      : 'Calgary, AB')
+
   return (
     <div className="card" style={{ textAlign: 'center' }}>
       <h3 style={{ fontSize: '18px', marginBottom: '8px' }}>
         Field Weather Outlook
       </h3>
+      {!loading && !error && (
+        <p style={{ color: 'var(--text-subtle)', fontSize: '0.85rem', marginBottom: '8px' }}>
+          {locationLabel}
+        </p>
+      )}
       {loading ? (
         <p style={{ color: 'var(--text-subtle)' }}>Loading weather data…</p>
       ) : error ? (

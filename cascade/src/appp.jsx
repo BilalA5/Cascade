@@ -161,6 +161,7 @@ export default function App() {
           recentPest: pestSeries,
           weather: weatherSummary?.current
             ? {
+                locationName: weatherSummary.current.locationName,
                 temperature: weatherSummary.current.temperature,
                 humidity: weatherSummary.current.humidity,
                 windSpeed: weatherSummary.current.windSpeed,

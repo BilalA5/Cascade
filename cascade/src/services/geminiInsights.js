@@ -13,7 +13,7 @@ const buildPrompt = ({
   const moistureTrend = recentMoisture.slice(0, 6).map((value, index) => `Reading ${index + 1}: ${value ?? 'unknown'}%`).join('\n')
   const pestTrend = recentPest.slice(0, 6).map((value, index) => `Reading ${index + 1}: ${value ?? 'unknown'}%`).join('\n')
   const weatherSummary = weather
-    ? `Current field weather:
+    ? `Current field weather for ${weather?.locationName ?? 'Calgary, Alberta'}:
 - Temperature: ${weather?.temperature ?? 'unknown'}°C
 - Humidity: ${weather?.humidity ?? 'unknown'}%
 - Wind speed: ${weather?.windSpeed ?? 'unknown'} m/s
@@ -49,6 +49,8 @@ ${pestTrend || 'No recent pest history.'}
 
 Weather context:
 ${weatherSummary}
+
+Identify any forecast-related risks to crop health (e.g., frost events, heat stress, high winds, heavy rain) and provide precise, preventive actions tied to the data.
 
 Based on these numbers, generate exactly ${MAX_INSIGHTS} concise recommendations.
 
