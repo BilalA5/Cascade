@@ -15,6 +15,6 @@ export default defineConfig({
     'process.env.VITE_AWS_SECRET_ACCESS_KEY': JSON.stringify(process.env.VITE_AWS_SECRET_ACCESS_KEY ?? ''),
   },
   server: {
-    port: 3000,
+    port: 3003,
   },
 })
