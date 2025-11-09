@@ -1,15 +1,15 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient, QueryCommand } from '@aws-sdk/lib-dynamodb'
 
-const REGION =
-  import.meta.env.VITE_AWS_REGION ??
-  (typeof process !== 'undefined' ? process.env.VITE_AWS_REGION : undefined) ??
-  'us-east-2'
+const readEnv = (key) => {
+  const raw =
+    import.meta.env[key] ??
+    (typeof process !== 'undefined' ? process.env[key] : undefined)
+  return typeof raw === 'string' ? raw.trim() : raw
+}
 
-const TABLE_NAME =
-  import.meta.env.VITE_DYNAMODB_TABLE_NAME ??
-  (typeof process !== 'undefined' ? process.env.VITE_DYNAMODB_TABLE_NAME : undefined) ??
-  'CascadeReadings'
+const REGION = readEnv('VITE_AWS_REGION') || 'us-east-2'
+const TABLE_NAME = readEnv('VITE_DYNAMODB_TABLE_NAME') || 'CascadeReadings'
 
 const REQUIRED_ENV = [REGION, TABLE_NAME]
 
@@ -31,18 +31,18 @@ if (REGION) {
   clientConfig.region = 'us-east-2'
 }
 
-const ACCESS_KEY =
-  import.meta.env.VITE_AWS_ACCESS_KEY_ID ??
-  (typeof process !== 'undefined' ? process.env.VITE_AWS_ACCESS_KEY_ID : undefined)
-const SECRET_KEY =
-  import.meta.env.VITE_AWS_SECRET_ACCESS_KEY ??
-  (typeof process !== 'undefined' ? process.env.VITE_AWS_SECRET_ACCESS_KEY : undefined)
+const ACCESS_KEY = readEnv('VITE_AWS_ACCESS_KEY_ID')
+const SECRET_KEY = readEnv('VITE_AWS_SECRET_ACCESS_KEY')
 
 if (ACCESS_KEY && SECRET_KEY) {
   clientConfig.credentials = {
     accessKeyId: ACCESS_KEY,
     secretAccessKey: SECRET_KEY,
   }
+} else if (import.meta.env.DEV) {
+  console.warn(
+    'DynamoDB credentials are missing. Set VITE_AWS_ACCESS_KEY_ID and VITE_AWS_SECRET_ACCESS_KEY to query directly from the browser.'
+  )
 }
 
 const client = new DynamoDBClient(clientConfig)
