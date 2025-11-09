@@ -10,16 +10,15 @@ dynamodb = boto3.resource('dynamodb')
 TABLE = os.environ.get('TABLE_NAME', 'CascadeReadings')
 BUCKET = os.environ.get('BUCKET_NAME', 'cascade-reports')
 
-#Create Lambda Handler Function
+#Create Lambda Handler Function to Ingest and Process Data
 def lambda_handler(event,context):
-    table = dynamodb.table(TABLE)
-    bucket = event.get("device_id", "ESP32_01")
+    
+    #Get the data and store it into DynamoDB
+    try : 
+        body = json.loads(event.get("body", "{}"))
 
-    #Latest Readings
-    response = table.scan(Limit = 10)
-    items = response["Items"]
-
-    if not items:
+        #Validate Required Fields
+        required = []
         
 
         
