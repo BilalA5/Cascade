@@ -168,13 +168,27 @@ Restart the dev server after edits so Vite reloads the env vars. For production,
 
 ## Snapshots
 
-| Description | Image |
-|-------------|-------|
-| DynamoDB items captured from the ESP32 feed | ![DynamoDB sensor readings](docs/images/dynamodb-readings.png) |
-| Dashboard moisture trend (line graph) visualising recorded data | ![Moisture trend line graph](docs/images/moisture-trend.png) |
-| ESP32 hardware rig with infrared + moisture sensors | ![ESP32 hardware setup](docs/images/esp32-hardware.png) |
+Insert the high-resolution figures in the following spots (each image should live in `docs/images/`):
 
-> Place the screenshots in `docs/images/` with the filenames above to render them in the README.
+1. **After the Architecture section, before Features**  
+   ```
+   ![DynamoDB sensor readings](docs/images/dynamodb-readings.png)
+   _Figure 1: DynamoDB items captured from the ESP32 feed._
+   ```
+
+2. **Between Features and Hardware**  
+   ```
+   ![Moisture trend line graph](docs/images/moisture-trend.png)
+   _Figure 2: Dashboard moisture trend visualising recorded soil moisture._
+   ```
+
+3. **After the Hardware section, before Software Stack**  
+   ```
+   ![ESP32 hardware setup](docs/images/esp32-hardware.png)
+   _Figure 3: ESP32 field rig with infrared and moisture sensors._
+   ```
+
+> When you add the actual images, ensure each caption sits immediately beneath its corresponding image for textbook-style presentation.
 
 ---
 
