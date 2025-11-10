@@ -13,7 +13,7 @@ An end‑to‑end field telemetry stack that combines ESP32‑based sensing hard
 5. [Software Stack](#software-stack)  
 6. [Local Development](#local-development)  
 7. [Environment Variables](#environment-variables)  
-8. [AWS Deployment (Amplify)](#aws-deployment-amplify)  
+8. [AWS Deployment (Amplify)](#aws-deployment-amplify)   
 9. [IoT & Data Ingestion](#iot--data-ingestion)  
 10. [Troubleshooting](#troubleshooting)  
 11. [Snapshots](#snapshots)
@@ -198,6 +198,4 @@ Restart the dev server after edits so Vite reloads the env vars. For production,
 
 MIT License. See [LICENSE](LICENSE) for details.
 
----
-
-🌱
+--- 
