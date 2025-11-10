@@ -155,7 +155,7 @@ Restart the dev server after edits so Vite reloads the env vars. For production,
     "moisture": 72.6,
     "pest_score": 0.34
   }
-  ```
+  
 
 ---
 
