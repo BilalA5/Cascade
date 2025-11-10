@@ -178,11 +178,19 @@ Restart the dev server after edits so Vite reloads the env vars. For production,
 
 ---
 
-## License
+## Collaborators
 
-MIT © BilalA5. See [LICENSE](LICENSE) for details.
+- Bilal Ahmed
+- Haris Naveed
+- Shayan Shaikh
+- Saifullah Asad
 
 ---
 
-Happy growing! 🌱 Let me know if you build additional integrations—weather stations, irrigation controllers, or yield predictors plug nicely into this architecture.
-# Cascade
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+🌱
