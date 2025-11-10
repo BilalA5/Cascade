@@ -37,6 +37,9 @@ ESP32 Sensors  -->  AWS IoT Core  -->  DynamoDB  -->  React Dashboard
                                    OpenWeather (forecast)
 ```
 
+![DynamoDB sensor readings](cascade/docs/images/dynamodb-readings.png)  
+_Figure 1: DynamoDB items captured from the ESP32 feed._
+
 1. **Hardware:** ESP32 reads soil moisture (capacitive probe) and an infrared motion sensor, then pushes JSON payloads.  
 2. **Cloud ingestion:** AWS IoT Core routes messages into DynamoDB `CascadeReadings`.  
 3. **Frontend:** `cascade/` Vite React app fetches live readings, weather (OpenWeather API), and uses Gemini for contextual insights.  
@@ -52,6 +55,9 @@ ESP32 Sensors  -->  AWS IoT Core  -->  DynamoDB  -->  React Dashboard
 - DynamoDB-backed history with React Query caching and fallbacks.  
 - Responsive UI with gradient insight cards and tooltip rollovers.
 
+![Moisture trend line graph](cascade/docs/images/moisture-trend.png)  
+_Figure 2: Dashboard moisture trend visualising recorded soil moisture._
+
 ---
 
 ## Hardware
@@ -65,6 +71,9 @@ ESP32 Sensors  -->  AWS IoT Core  -->  DynamoDB  -->  React Dashboard
 | USB Data Cable | Power + serial flashing |
 
 > ⚙️ Flash the ESP32 with the supplied Arduino sketch (see `arduino/` folder). The payload includes `device_id`, `moisture`, `timestamp`, and optional PIR readings.
+
+![ESP32 hardware setup](cascade/docs/images/esp32-hardware.png)  
+_Figure 3: ESP32 field rig with infrared and moisture sensors._
 
 ---
 
@@ -168,27 +177,11 @@ Restart the dev server after edits so Vite reloads the env vars. For production,
 
 ## Snapshots
 
-Insert the high-resolution figures in the following spots (each image should live in `docs/images/`):
-
-1. **After the Architecture section, before Features**  
-   ```
-   ![DynamoDB sensor readings](docs/images/dynamodb-readings.png)
-   _Figure 1: DynamoDB items captured from the ESP32 feed._
-   ```
-
-2. **Between Features and Hardware**  
-   ```
-   ![Moisture trend line graph](docs/images/moisture-trend.png)
-   _Figure 2: Dashboard moisture trend visualising recorded soil moisture._
-   ```
-
-3. **After the Hardware section, before Software Stack**  
-   ```
-   ![ESP32 hardware setup](docs/images/esp32-hardware.png)
-   _Figure 3: ESP32 field rig with infrared and moisture sensors._
-   ```
-
-> When you add the actual images, ensure each caption sits immediately beneath its corresponding image for textbook-style presentation.
+| Figure | Location in README | File |
+|--------|--------------------|------|
+| Figure 1 | After Architecture diagram | `cascade/docs/images/dynamodb-readings.png` |
+| Figure 2 | After Features list | `cascade/docs/images/moisture-trend.png` |
+| Figure 3 | After Hardware table | `cascade/docs/images/esp32-hardware.png` |
 
 ---
 
