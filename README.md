@@ -1,6 +1,6 @@
 # Cascade Agriculture Monitoring Platform
 
-An end‑to‑end field telemetry stack that combines ESP32‑based sensing hardware, AWS IoT + DynamoDB ingestion, a Calgary‑aware weather layer, and Gemini‑generated agronomy insights. The system streams real-time soil moisture and motion data from the field, stores it in DynamoDB, visualises the readings on a Vite/React dashboard, and enriches the experience with OpenWeather forecasts and Gemini risk assessments.
+An end‑to‑end field telemetry stack that combines ESP32‑based sensing hardware, AWS IoT + DynamoDB ingestion, a Calgary‑aware weather layer, and Gemini‑generated agronomy insights. The system streams real-time soil moisture and motion data from the field, stores it in DynamoDB, visualises the readings on a Vite/React dashboard, and enriches the experience with OpenWeather forecasts and Gemini risk assessments. 
 
 ---
 
