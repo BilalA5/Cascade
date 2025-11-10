@@ -56,7 +56,7 @@ _Figure 1: DynamoDB items captured from the ESP32 feed._
 - Responsive UI with gradient insight cards and tooltip rollovers.
 
 ![Moisture trend line graph](cascade/docs/images/moisture-trend.png)  
-_Figure 2: Dashboard moisture trend visualising recorded soil moisture._
+_Figure 3: ESP32 field rig with infrared and moisture sensors._
 
 ---
 
@@ -73,7 +73,7 @@ _Figure 2: Dashboard moisture trend visualising recorded soil moisture._
 > ⚙️ Flash the ESP32 with the supplied Arduino sketch (see `arduino/` folder). The payload includes `device_id`, `moisture`, `timestamp`, and optional PIR readings.
 
 ![ESP32 hardware setup](cascade/docs/images/esp32-hardware.png)  
-_Figure 3: ESP32 field rig with infrared and moisture sensors._
+_Figure 2: Dashboard moisture trend visualising recorded soil moisture._
 
 ---
 

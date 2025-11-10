@@ -5,6 +5,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import App from './App.jsx'
 import './theme.css'
 
+console.log('OpenWeather key:', import.meta.env.VITE_OPENWEATHER_API_KEY);
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
