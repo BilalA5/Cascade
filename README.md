@@ -26,6 +26,9 @@ An end‑to‑end field telemetry stack that combines ESP32‑based sensing hard
 - **Hybrid nature:** The project spans **hardware** (ESP32 + moisture + PIR sensor) and **software** (React dashboard + AWS cloud services + AI integrations).  
 - **Primary location:** Weather defaults to **Calgary, Alberta** while allowing overrides through environment variables.
 
+> 🔗 **Live Frontend:** [Cascade Dashboard](http://cascade-frontend-393344834379.s3-website.us-east-2.amazonaws.com)  
+> 🎥 **Demo Video:** [Watch the walkthrough](https://youtube.com/shorts/QNphY0bLslk?si=LLD4VrCa_xxE65Fj)
+
 ---
 
 ## Architecture
